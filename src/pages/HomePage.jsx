@@ -1,5 +1,6 @@
-import React, {useEffect} from 'react';
- 
+import React, { useEffect } from 'react';
+import backgroundImage from '../assets/images/ddf.jpg';
+
 import {
     AppBar,
     Toolbar,
@@ -18,7 +19,7 @@ import {
     useMediaQuery
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import './styles.css'; 
+import './styles.css';
 
 
 
@@ -44,12 +45,29 @@ const Chip = styled(Box)(({ theme }) => ({
 
 // Custom styled components
 const HeroSection = styled(Box)(({ theme }) => ({
-    background: 'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     color: 'white',
     padding: theme.spacing(15, 0, 10),
     textAlign: 'center',
     position: 'relative',
     overflow: 'hidden',
+    '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for better text visibility
+        zIndex: 1
+    },
+    '& > *': { // This targets all direct children
+        position: 'relative',
+        zIndex: 2 // Ensures content appears above the overlay
+    }
 }));
 
 const ServiceCard = styled(Card)(({ theme }) => ({
@@ -95,68 +113,68 @@ function ChinguHomePage() {
     useEffect(() => {
         // Reveal animations on scroll
         const observerOptions = {
-          threshold: 0.2,
-          rootMargin: '0px 0px -100px 0px'
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
         };
-        
+
         const revealObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('active');
-              revealObserver.unobserve(entry.target);
-            }
-          });
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
         }, observerOptions);
-        
+
         document.querySelectorAll('.reveal-on-scroll').forEach(element => {
-          revealObserver.observe(element);
+            revealObserver.observe(element);
         });
-        
+
         // Parallax scroll effect
         const parallaxElements = document.querySelectorAll('.parallax-element');
-        
+
         function handleScroll() {
-          const scrollPosition = window.pageYOffset;
-          
-          parallaxElements.forEach(element => {
-            const elementPosition = element.offsetTop;
-            const distance = elementPosition - scrollPosition;
-            const speed = 0.2;
-            
-            element.style.transform = `translateY(${distance * speed}px)`;
-          });
-          
-          // Scroll speed for value items
-          document.querySelectorAll('[data-scroll-speed]').forEach(element => {
-            const speed = parseFloat(element.getAttribute('data-scroll-speed'));
-            const rect = element.getBoundingClientRect();
-            const viewHeight = window.innerHeight;
-            
-            if (rect.top < viewHeight && rect.bottom > 0) {
-              const scrollPercentage = (viewHeight - rect.top) / (viewHeight + rect.height);
-              const moveY = (scrollPercentage - 0.5) * speed * 100;
-              
-              element.style.transform = `translateY(${moveY}px)`;
-            }
-          });
+            const scrollPosition = window.pageYOffset;
+
+            parallaxElements.forEach(element => {
+                const elementPosition = element.offsetTop;
+                const distance = elementPosition - scrollPosition;
+                const speed = 0.2;
+
+                element.style.transform = `translateY(${distance * speed}px)`;
+            });
+
+            // Scroll speed for value items
+            document.querySelectorAll('[data-scroll-speed]').forEach(element => {
+                const speed = parseFloat(element.getAttribute('data-scroll-speed'));
+                const rect = element.getBoundingClientRect();
+                const viewHeight = window.innerHeight;
+
+                if (rect.top < viewHeight && rect.bottom > 0) {
+                    const scrollPercentage = (viewHeight - rect.top) / (viewHeight + rect.height);
+                    const moveY = (scrollPercentage - 0.5) * speed * 100;
+
+                    element.style.transform = `translateY(${moveY}px)`;
+                }
+            });
         }
-        
+
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Initialize positions
-        
+
         // Interactive hotspots
         document.querySelectorAll('.hotspot').forEach(hotspot => {
-          hotspot.addEventListener('mouseenter', () => {
-            // Add any additional interactive effects here
-          });
+            hotspot.addEventListener('mouseenter', () => {
+                // Add any additional interactive effects here
+            });
         });
-        
+
         // Clean up event listeners on component unmount
         return () => {
-          window.removeEventListener('scroll', handleScroll);
-          revealObserver.disconnect();
+            window.removeEventListener('scroll', handleScroll);
+            revealObserver.disconnect();
         };
-      }, []); // Empty dependency array means this runs once on mount
+    }, []); // Empty dependency array means this runs once on mount
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -181,7 +199,7 @@ function ChinguHomePage() {
                             <Button color="inherit">About</Button>
                             <Button color="inherit">Services</Button>
                             <Button color="inherit">Projects</Button>
-                            <Button color="inherit">Contact</Button>
+                            <Button color="inherit" href="/contact">Contact</Button>
                         </>
                     )}
                 </Toolbar>
@@ -221,7 +239,7 @@ function ChinguHomePage() {
             <section id="about" class="about-section">
                 <div class="container">
                     <div class="about-wrapper">
-                        
+
                         <div class="section-header" data-scroll-reveal="enter from the top">
                             <h2 class="gradient-text">ABOUT US</h2>
                             <div class="accent-line"></div>
@@ -229,7 +247,7 @@ function ChinguHomePage() {
 
                         <div class="about-content">
                             <div class="text-content">
-                              
+
                                 <p class="lead-text reveal-on-scroll">
                                     Chingu is where innovation meets sustainability, research fuels creativity, playful design
                                     sparks joy, technology empowers, and experience reigns supreme. At Chingu, we're not
@@ -251,9 +269,9 @@ function ChinguHomePage() {
                                 </p>
                             </div>
 
-                           
+
                             <div class="company-image-container">
-                              
+
                                 <div class="image-wrapper parallax-element">
                                     <img
                                         src="company-image.webp"
@@ -262,7 +280,7 @@ function ChinguHomePage() {
                                         loading="lazy"
                                     />
 
-                                    
+
                                     <div class="interactive-overlay">
                                         <div class="hotspot" data-target="innovation">
                                             <span class="pulse-circle"></span>
@@ -284,7 +302,7 @@ function ChinguHomePage() {
                             </div>
                         </div>
 
-                        
+
                         <div class="values-container">
                             <div class="value-item" data-scroll-speed="1.2">
                                 <div class="value-icon">
