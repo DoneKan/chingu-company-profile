@@ -16,6 +16,7 @@ import {
     Paper,
     IconButton,
     useTheme,
+    Menu,
     useMediaQuery
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -183,27 +184,6 @@ function ChinguHomePage() {
         <>
 
 
-            {/* Navigation */}
-            <AppBar position="fixed" color="default" elevation={1}>
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-                        CHINGU
-                    </Typography>
-                    {isMobile ? (
-                        <IconButton color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton>
-                    ) : (
-                        <>
-                            <Button color="inherit">Home</Button>
-                            <Button color="inherit">About</Button>
-                            <Button color="inherit">Services</Button>
-                            <Button color="inherit">Projects</Button>
-                            <Button color="inherit" href="/contact">Contact</Button>
-                        </>
-                    )}
-                </Toolbar>
-            </AppBar>
 
             {/* Hero Section */}
             <HeroSection>

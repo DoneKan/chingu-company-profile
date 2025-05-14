@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Box,
     Container,
@@ -9,14 +9,10 @@ import {
     Paper,
     useTheme,
     useMediaQuery,
-    Divider,
     Card,
     CardContent,
     Snackbar,
     Alert,
-    IconButton,
-    Tooltip,
-    Fade,
     CircularProgress
 } from '@mui/material';
 import {
@@ -32,11 +28,9 @@ import {
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
-// Custom styled components
-const AnimatedBox = motion(Box);
-const AnimatedPaper = motion(Paper);
+// Optimized motion components - only use animation where it matters most
 const AnimatedTypography = motion(Typography);
-const AnimatedCard = motion(Card);
+const AnimatedPaper = motion(Paper);
 
 const ContactUs = () => {
     const theme = useTheme();
@@ -51,29 +45,20 @@ const ContactUs = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
-    const [hover, setHover] = useState(false);
+    
+    // Remove unnecessary hover state tracking
     const [currentHoveredIcon, setCurrentHoveredIcon] = useState(null);
 
-    // Parallax effect on scroll
-    const [scrollY, setScrollY] = useState(0);
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrollY(window.scrollY);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+    // Efficient form handling with useCallback
+    const handleChange = useCallback((e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = useCallback((e) => {
         e.preventDefault();
         setLoading(true);
 
@@ -89,12 +74,12 @@ const ContactUs = () => {
                 service: ''
             });
         }, 2000);
-    };
+    }, []);
 
-    const handleCloseSnackbar = () => {
+    const handleCloseSnackbar = useCallback(() => {
         setSuccess(false);
         setError(false);
-    };
+    }, []);
 
     const services = [
         { name: "Studio", icon: <DesignServices />, description: "Playful concept design and prototyping" },
@@ -102,23 +87,26 @@ const ContactUs = () => {
         { name: "Transcendence", icon: <Construction />, description: "Engineering excellence bringing prototypes to life" },
     ];
 
+    // Simplified gradient backgrounds
+    const primaryGradient = `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`;
+    const paperBackground = theme.palette.background.paper;
+
     return (
-        <Container maxWidth="xl" sx={{ py: 12, overflow: 'hidden' }}>
-            {/* Header Section with AnimatedTypography */}
-            <Box sx={{ mb: 10, textAlign: 'center' }}>
+        <Container maxWidth="xl" sx={{ py: 8 }}>
+            {/* Header Section with minimal animations */}
+            <Box sx={{ mb: 6, textAlign: 'center' }}>
                 <AnimatedTypography
                     variant="h1"
                     sx={{
                         fontWeight: 800,
                         fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-                        background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                        background: primaryGradient,
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        letterSpacing: '-0.05em'
                     }}
-                    initial={{ opacity: 0, y: 50 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 0.5 }}
                 >
                     <Box component="span" sx={{ display: 'inline-block', position: 'relative' }}>
                         C
@@ -138,71 +126,45 @@ const ContactUs = () => {
                     </Box>
                     Connect with CHINGU
                 </AnimatedTypography>
-                <AnimatedTypography
+                <Typography
                     variant="h6"
                     color="text.secondary"
-                    sx={{ mt: 2, maxWidth: '800px', mx: 'auto', lineHeight: 1.6 }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
+                    sx={{ mt: 2, maxWidth: '800px', mx: 'auto' }}
                 >
                     Where innovation meets design. Let's create something extraordinary together.
-                </AnimatedTypography>
+                </Typography>
             </Box>
 
-            <Grid container spacing={6}>
-                {/* Contact Information Card */}
-                <Grid item xs={12} md={6}>  {/* Changed from md={7} to md={6} */}
-                    <AnimatedPaper
-                        elevation={8}
+            <Grid container spacing={4} alignItems="stretch">
+                {/* Contact Information Card - Fixed width to match form */}
+                <Grid item xs={12} md={6}>
+                    <Paper
+                        elevation={3}
                         sx={{
                             p: 4,
-                            borderRadius: 4,
+                            borderRadius: 2,
                             height: '100%',
-                            width: '100%',
-                            background: `linear-gradient(145deg, 
-                    ${theme.palette.background.paper}, 
-                    ${theme.palette.background.default})`,
-                            position: 'relative',
-                            overflow: 'hidden',
+                            backgroundColor: paperBackground,
                         }}
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
                     >
-
-                        {/* Abstract geometric shapes */}
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                top: -100,
-                                right: -100,
-                                width: 300,
-                                height: 300,
-                                borderRadius: '50%',
-                                background: `radial-gradient(circle, ${theme.palette.primary.light}22, transparent 70%)`,
-                                zIndex: 0,
-                            }}
-                        />
-
-                        <Box sx={{ position: 'relative', zIndex: 1 }}>
-                            <Typography variant="h4" fontWeight={700} mb={4} sx={{
+                        <Box>
+                            <Typography variant="h4" fontWeight={700} mb={3} sx={{
                                 position: 'relative',
                                 '&:after': {
                                     content: '""',
                                     position: 'absolute',
                                     left: 0,
-                                    bottom: -10,
-                                    width: 80,
-                                    height: 4,
+                                    bottom: -8,
+                                    width: 60,
+                                    height: 3,
                                     bgcolor: theme.palette.primary.main,
-                                    borderRadius: 2
+                                    borderRadius: 1
                                 }
                             }}>
                                 Get in Touch
                             </Typography>
 
-                            <Box sx={{ mt: 7 }}>
+                            <Box sx={{ mt: 5 }}>
                                 {[
                                     {
                                         icon: <LocationOn fontSize="large" />,
@@ -225,24 +187,21 @@ const ContactUs = () => {
                                         secondary: "Mon - Fri: 9:00AM - 6:00PM"
                                     }
                                 ].map((item, index) => (
-                                    <AnimatedBox
+                                    <Box
                                         key={index}
                                         sx={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            mb: 4,
+                                            mb: 3,
                                             p: 2,
                                             borderRadius: 2,
-                                            transition: 'all 0.3s ease',
+                                            transition: 'all 0.2s ease',
                                             '&:hover': {
                                                 bgcolor: 'background.paper',
-                                                transform: 'translateX(10px)',
-                                                boxShadow: 3
+                                                boxShadow: 1,
+                                                transform: 'translateX(5px)'
                                             }
                                         }}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                                     >
                                         <Box
                                             sx={{
@@ -251,9 +210,6 @@ const ContactUs = () => {
                                                 p: 1.5,
                                                 borderRadius: '50%',
                                                 backgroundColor: `${theme.palette.primary.main}15`,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
                                             }}
                                         >
                                             {item.icon}
@@ -262,49 +218,38 @@ const ContactUs = () => {
                                             <Typography variant="body1" fontWeight={600}>
                                                 {item.primary}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                            <Typography variant="body2" color="text.secondary">
                                                 {item.secondary}
                                             </Typography>
                                         </Box>
-                                    </AnimatedBox>
+                                    </Box>
                                 ))}
                             </Box>
 
-                            <Typography variant="subtitle1" sx={{ mt: 6, mb: 3, fontWeight: 600 }}>
+                            <Typography variant="subtitle1" sx={{ mt: 4, mb: 2, fontWeight: 600 }}>
                                 Our Services
                             </Typography>
 
                             <Grid container spacing={2}>
                                 {services.map((service, index) => (
                                     <Grid item xs={12} sm={4} key={index}>
-                                        <AnimatedCard
+                                        <Card
                                             sx={{
                                                 textAlign: 'center',
-                                                p: 2,
+                                                p: 1,
                                                 height: '100%',
-                                                transition: 'transform 0.3s ease',
+                                                transition: 'transform 0.2s ease',
                                                 '&:hover': {
-                                                    transform: 'translateY(-8px)',
-                                                    boxShadow: 6
+                                                    transform: 'translateY(-5px)',
+                                                    boxShadow: 2
                                                 }
                                             }}
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                                            whileHover={{
-                                                scale: 1.05,
-                                                transition: { duration: 0.2 }
-                                            }}
-                                            onMouseEnter={() => setCurrentHoveredIcon(index)}
-                                            onMouseLeave={() => setCurrentHoveredIcon(null)}
                                         >
                                             <CardContent>
                                                 <Box
                                                     sx={{
-                                                        mb: 2,
-                                                        color: theme.palette.primary.main,
-                                                        transform: currentHoveredIcon === index ? 'scale(1.2)' : 'scale(1)',
-                                                        transition: 'transform 0.3s ease'
+                                                        mb: 1,
+                                                        color: theme.palette.primary.main
                                                     }}
                                                 >
                                                     {service.icon}
@@ -316,65 +261,45 @@ const ContactUs = () => {
                                                     {service.description}
                                                 </Typography>
                                             </CardContent>
-                                        </AnimatedCard>
+                                        </Card>
                                     </Grid>
                                 ))}
                             </Grid>
                         </Box>
-                    </AnimatedPaper>
+                    </Paper>
                 </Grid>
 
-                {/* Contact Form */}
-                <Grid item xs={12} md={7}>
-                    <AnimatedPaper
-                        elevation={8}
+                {/* Contact Form - Matching width with contact info */}
+                <Grid item xs={12} md={6}>
+                    <Paper
+                        elevation={3}
                         component="form"
                         onSubmit={handleSubmit}
                         sx={{
                             p: 4,
-                            borderRadius: 4,
-                            position: 'relative',
-                            overflow: 'hidden',
-                            background: `linear-gradient(135deg, 
-                ${theme.palette.background.paper}, 
-                ${theme.palette.background.default})`,
+                            borderRadius: 2,
+                            height: '100%',
+                            backgroundColor: paperBackground,
                         }}
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8 }}
                     >
-                        {/* Abstract design elements */}
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                bottom: -80,
-                                left: -80,
-                                width: 250,
-                                height: 250,
-                                borderRadius: '50%',
-                                background: `radial-gradient(circle, ${theme.palette.secondary.light}22, transparent 70%)`,
-                                zIndex: 0,
-                            }}
-                        />
-
-                        <Box sx={{ position: 'relative', zIndex: 1 }}>
-                            <Typography variant="h4" fontWeight={700} mb={4} sx={{
+                        <Box>
+                            <Typography variant="h4" fontWeight={700} mb={3} sx={{
                                 position: 'relative',
                                 '&:after': {
                                     content: '""',
                                     position: 'absolute',
                                     left: 0,
-                                    bottom: -10,
+                                    bottom: -8,
                                     width: 60,
-                                    height: 4,
+                                    height: 3,
                                     bgcolor: theme.palette.secondary.main,
-                                    borderRadius: 2
+                                    borderRadius: 1
                                 }
                             }}>
                                 Send Us a Message
                             </Typography>
 
-                            <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 4 }}>
+                            <Typography variant="body1" color="text.secondary" paragraph sx={{ mb: 3 }}>
                                 Have a question or want to collaborate? Fill out the form below and we'll get back to you within 24 hours.
                             </Typography>
 
@@ -390,7 +315,7 @@ const ContactUs = () => {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 2,
+                                                borderRadius: 1,
                                             }
                                         }}
                                     />
@@ -407,7 +332,7 @@ const ContactUs = () => {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 2,
+                                                borderRadius: 1,
                                             }
                                         }}
                                     />
@@ -423,7 +348,7 @@ const ContactUs = () => {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 2,
+                                                borderRadius: 1,
                                             }
                                         }}
                                     />
@@ -431,7 +356,7 @@ const ContactUs = () => {
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="Service Interest (Optional)"
+                                        
                                         name="service"
                                         value={formData.service}
                                         onChange={handleChange}
@@ -440,7 +365,7 @@ const ContactUs = () => {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 2,
+                                                borderRadius: 1,
                                             }
                                         }}
                                     >
@@ -458,14 +383,14 @@ const ContactUs = () => {
                                         label="Your Message"
                                         name="message"
                                         multiline
-                                        rows={6}
+                                        rows={5}
                                         value={formData.message}
                                         onChange={handleChange}
                                         required
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 2,
+                                                borderRadius: 1,
                                             }
                                         }}
                                     />
@@ -478,69 +403,40 @@ const ContactUs = () => {
                                         size="large"
                                         disabled={loading}
                                         sx={{
-                                            borderRadius: 8,
+                                            borderRadius: 2,
                                             py: 1.5,
                                             px: 4,
                                             fontWeight: 600,
-                                            position: 'relative',
-                                            overflow: 'hidden',
-                                            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                                            transition: 'all 0.3s ease',
+                                            background: primaryGradient,
                                             '&:hover': {
-                                                transform: 'translateY(-3px)',
-                                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
+                                                boxShadow: 3
                                             }
                                         }}
                                         startIcon={loading ? null : <Send />}
-                                        onMouseEnter={() => setHover(true)}
-                                        onMouseLeave={() => setHover(false)}
                                     >
                                         {loading ? (
                                             <CircularProgress size={24} color="inherit" />
                                         ) : (
                                             "Send Message"
                                         )}
-
-                                        {/* Ripple effect on hover */}
-                                        {hover && (
-                                            <Box
-                                                component={motion.div}
-                                                sx={{
-                                                    position: 'absolute',
-                                                    top: '50%',
-                                                    left: '50%',
-                                                    width: '300%',
-                                                    height: '300%',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                                    zIndex: 0,
-                                                }}
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
-                                                transition={{ duration: 0.8 }}
-                                            />
-                                        )}
                                     </Button>
                                 </Grid>
                             </Grid>
                         </Box>
-                    </AnimatedPaper>
+                    </Paper>
                 </Grid>
             </Grid>
 
-            {/* Map Section */}
-            <Box sx={{ mt: 10 }}>
-                <AnimatedPaper
-                    elevation={5}
+            {/* Map Section - Simplified */}
+            <Box sx={{ mt: 8 }}>
+                <Paper
+                    elevation={3}
                     sx={{
-                        borderRadius: 4,
+                        borderRadius: 2,
                         overflow: 'hidden',
                         height: 400,
                         position: 'relative'
                     }}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
                 >
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7568896861844!2d32.629!3d0.315!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMMKwMTgnNTQuMCJOIDMywrAzNyc0NC40IkU!5e0!3m2!1sen!2sus!4v1621360000000!5m2!1sen!2sus"
@@ -552,7 +448,6 @@ const ContactUs = () => {
                         title="Chingu Company Location"
                     />
 
-                    {/* Overlay card with company info */}
                     <Box
                         sx={{
                             position: 'absolute',
@@ -562,7 +457,7 @@ const ContactUs = () => {
                             bgcolor: 'background.paper',
                             p: 3,
                             borderRadius: 2,
-                            boxShadow: 5
+                            boxShadow: 3
                         }}
                     >
                         <Typography variant="h6" fontWeight={700} gutterBottom>
@@ -580,12 +475,11 @@ const ContactUs = () => {
                             href="https://goo.gl/maps/JyJYJ2h9X5Z2n9Jt7"
                             target="_blank"
                             rel="noopener noreferrer"
-                            sx={{ mt: 1 }}
                         >
                             Get Directions
                         </Button>
                     </Box>
-                </AnimatedPaper>
+                </Paper>
             </Box>
 
             {/* Feedback Snackbars */}
