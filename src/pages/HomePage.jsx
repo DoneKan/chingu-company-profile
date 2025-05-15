@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import backgroundImage from '../assets/images/ddf.jpg';
+//import backgroundImage from '../assets/images/ddf.jpg';
 import innovationBg from '../assets/images/values/innovation.png';
 import sustainabilityBg from '../assets/images/values/sustainability.png';
 import creativityBg from '../assets/images/values/creativity.png';
 import excellenceBg from '../assets/images/values/excellence.png';
+
+import Screen from '../components/screenSaver';
 
 import {
     AppBar,
@@ -48,7 +50,7 @@ const Chip = styled(Box)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-// Custom styled components
+{/*Custom styled components
 const HeroSection = styled(Box)(({ theme }) => ({
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
@@ -73,7 +75,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
         position: 'relative',
         zIndex: 2 // Ensures content appears above the overlay
     }
-}));
+}));  */}
 
 const ServiceCard = styled(Card)(({ theme }) => ({
     height: '100%',
@@ -190,7 +192,7 @@ function ChinguHomePage() {
 
 
 
-            {/* Hero Section */}
+            {/* Hero Section 
             <HeroSection>
                 <Container>
                     <Typography variant="h2" component="h1" gutterBottom fontWeight="bold">
@@ -218,6 +220,10 @@ function ChinguHomePage() {
                     </Box>
                 </Container>
             </HeroSection>
+            */}
+
+            <Screen/>
+
 
             {/* About Section */}
 
