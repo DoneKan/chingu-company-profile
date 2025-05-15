@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import backgroundImage from '../assets/images/ddf.jpg';
+//import backgroundImage from '../assets/images/ddf.jpg';
 import innovationBg from '../assets/images/values/innovation.png';
 import sustainabilityBg from '../assets/images/values/sustainability.png';
 import creativityBg from '../assets/images/values/creativity.png';
 import excellenceBg from '../assets/images/values/excellence.png';
+
+import Screen from '../components/screenSaver';
 
 import {
     AppBar,
@@ -48,7 +50,7 @@ const Chip = styled(Box)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-// Custom styled components
+{/*Custom styled components
 const HeroSection = styled(Box)(({ theme }) => ({
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
@@ -73,7 +75,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
         position: 'relative',
         zIndex: 2 // Ensures content appears above the overlay
     }
-}));
+}));  */}
 
 const ServiceCard = styled(Card)(({ theme }) => ({
     height: '100%',
@@ -190,7 +192,7 @@ function ChinguHomePage() {
 
 
 
-            {/* Hero Section */}
+            {/* Hero Section 
             <HeroSection>
                 <Container>
                     <Typography variant="h2" component="h1" gutterBottom fontWeight="bold">
@@ -218,6 +220,10 @@ function ChinguHomePage() {
                     </Box>
                 </Container>
             </HeroSection>
+            */}
+
+            <Screen />
+
 
             {/* About Section */}
 
@@ -601,49 +607,26 @@ function ChinguHomePage() {
             </Box>
 
             {/* Contact Section */}
-            <Box py={10}>
-                <Container>
-                    <SectionTitle variant="h3" component="h2">
-                        CONTACT US
-                    </SectionTitle>
-                    <Grid container spacing={6}>
-                        <Grid item xs={12} md={6}>
-                            <ContactItem>
-                                <LocationOnIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                                <Typography variant="body1">
-                                    7k Old Port Bell Rd, Kampala
-                                </Typography>
-                            </ContactItem>
-                            <ContactItem>
-                                <PhoneIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                                <Typography variant="body1">
-                                    +256 786458897
-                                </Typography>
-                            </ContactItem>
-                            <ContactItem>
-                                <EmailIcon sx={{ mr: 2, color: theme.palette.primary.main }} />
-                                <Typography variant="body1">
-                                    eugenemusinguziemu@gmail.com
-                                </Typography>
-                            </ContactItem>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    height: 300,
-                                    backgroundColor: '#f5f5f5',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Typography variant="h6" color="textSecondary">Map Location</Typography>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+            <Grid item xs={12} md={6}>
+                <div style={{
+                    height: 300,
+                    width: '100%',
+                    overflow: 'hidden',
+                    borderRadius: '4px'
+                }}>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7572380113456!2d32.62199931475247!3d0.31230199975522856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb828add16c9%3A0x9a1d4a3e11c5e35b!2sOld%20Port%20Bell%20Rd%2C%20Kampala%2C%20Uganda!5e0!3m2!1sen!2sus!4v1621345678901!5m2!1sen!2sus"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            border: 0
+                        }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
+                </div>
+            </Grid>
 
 
             {/* Footer */}
