@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 import backgroundImage from '../assets/images/ddf.jpg';
+import innovationBg from '../assets/images/values/innovation.png';
+import sustainabilityBg from '../assets/images/values/sustainability.png';
+import creativityBg from '../assets/images/values/creativity.png';
+import excellenceBg from '../assets/images/values/excellence.png';
 
 import {
     AppBar,
@@ -104,6 +108,7 @@ const ContactItem = styled(Box)(({ theme }) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(2),
 }));
+
 
 
 
@@ -220,10 +225,7 @@ function ChinguHomePage() {
                 <div class="container">
                     <div class="about-wrapper">
 
-                        <div class="section-header" data-scroll-reveal="enter from the top">
-                            <h2 class="gradient-text">ABOUT US</h2>
-                            <div class="accent-line"></div>
-                        </div>
+
 
                         <div class="about-content">
                             <div class="text-content">
@@ -254,7 +256,7 @@ function ChinguHomePage() {
 
                                 <div class="image-wrapper parallax-element">
                                     <img
-                                        src="company-image.webp"
+                                        src="src/assets/images/values/innovation.png"
                                         alt="Chingu Innovation"
                                         class="responsive-image blur-in"
                                         loading="lazy"
@@ -283,33 +285,133 @@ function ChinguHomePage() {
                         </div>
 
 
-                        <div class="values-container">
-                            <div class="value-item" data-scroll-speed="1.2">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" class="svg-icon"></svg>
+                        <div className="values-container">
+                            <div className="value-item" data-scroll-speed="1.2" style={{
+                                backgroundImage: `url(${innovationBg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                position: 'relative',
+                                transition: 'transform 0.3s ease',
+                                overflow: 'hidden',
+                            }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <div className="content-overlay" style={{
+                                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                    padding: '20px',
+                                }}>
+                                    <div className="value-icon">
+                                        <svg viewBox="0 0 24 24" className="svg-icon" style={{ fill: 'white', width: '40px', height: '40px' }}></svg>
+                                    </div>
+                                    <h3>Innovation</h3>
                                 </div>
-                                <h3>Innovation</h3>
                             </div>
 
-                            <div class="value-item" data-scroll-speed="1.4">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" class="svg-icon"></svg>
+                            <div className="value-item" data-scroll-speed="1.4" style={{
+                                backgroundImage: `url(${sustainabilityBg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                position: 'relative',
+                                transition: 'transform 0.3s ease',
+                                overflow: 'hidden',
+                            }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <div className="content-overlay" style={{
+                                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                    padding: '20px',
+                                }}>
+                                    <div className="value-icon">
+                                        <svg viewBox="0 0 24 24" className="svg-icon" style={{ fill: 'white', width: '40px', height: '40px' }}></svg>
+                                    </div>
+                                    <h3>Sustainability</h3>
                                 </div>
-                                <h3>Sustainability</h3>
                             </div>
 
-                            <div class="value-item" data-scroll-speed="1.6">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" class="svg-icon"></svg>
+                            <div className="value-item" data-scroll-speed="1.6" style={{
+                                backgroundImage: `url(${creativityBg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                position: 'relative',
+                                transition: 'transform 0.3s ease',
+                                overflow: 'hidden',
+                            }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <div className="content-overlay" style={{
+                                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                    padding: '20px',
+                                }}>
+                                    <div className="value-icon">
+                                        <svg viewBox="0 0 24 24" className="svg-icon" style={{ fill: 'white', width: '40px', height: '40px' }}></svg>
+                                    </div>
+                                    <h3>Creativity</h3>
                                 </div>
-                                <h3>Creativity</h3>
                             </div>
 
-                            <div class="value-item" data-scroll-speed="1.8">
-                                <div class="value-icon">
-                                    <svg viewBox="0 0 24 24" class="svg-icon"></svg>
+                            <div className="value-item" data-scroll-speed="1.8" style={{
+                                backgroundImage: `url(${excellenceBg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                position: 'relative',
+                                transition: 'transform 0.3s ease',
+                                overflow: 'hidden',
+                            }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <div className="content-overlay" style={{
+                                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    color: 'white',
+                                    padding: '20px',
+                                }}>
+                                    <div className="value-icon">
+                                        <svg viewBox="0 0 24 24" className="svg-icon" style={{ fill: 'white', width: '40px', height: '40px' }}></svg>
+                                    </div>
+                                    <h3>Excellence</h3>
                                 </div>
-                                <h3>Excellence</h3>
                             </div>
                         </div>
                     </div>
