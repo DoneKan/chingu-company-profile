@@ -259,12 +259,12 @@ export default function AstroScreensaver() {
               letterSpacing: '0.25rem'
             }}
           >
-            entreprises SA
+            entreprises UG
           </Typography>
         </Box>
       </Box>
       
-      {/* Etudiant Ordinateur logo/watermark in corner */}
+      {/*logo/watermark in corner */}
       <Box
         sx={{
           position: 'absolute',
