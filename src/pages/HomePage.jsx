@@ -4,7 +4,7 @@ import innovationBg from '../assets/images/values/innovation.png';
 import sustainabilityBg from '../assets/images/values/sustainability.png';
 import creativityBg from '../assets/images/values/creativity.png';
 import excellenceBg from '../assets/images/values/excellence.png';
-
+import ChinguDivisionsGrid from '../components/Home/division';
 import Screen from '../components/screenSaver';
 
 import {
@@ -426,112 +426,9 @@ function ChinguHomePage() {
 
 
             {/* Services Section */}
-            <Box py={10} sx={{ backgroundColor: '#f8f9fa' }}>
-                <Container>
-                    <SectionTitle variant="h3" component="h2">
-                        OUR DIVISIONS
-                    </SectionTitle>
-                    <Grid container spacing={4}>
-                        {/* CHINGU Studio */}
-                        <Grid item xs={12} md={4}>
-                            <ServiceCard elevation={3}>
-                                <CardMedia
-                                    component="div"
-                                    sx={{
-                                        height: 200,
-                                        backgroundColor: theme.palette.primary.light,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <DesignServicesIcon sx={{ fontSize: 80, color: 'white' }} />
-                                </CardMedia>
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography gutterBottom variant="h5" component="h3" fontWeight="bold">
-                                        CHINGU STUDIO
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" paragraph>
-                                        The Studio is a dynamic subdivision dedicated to playful design and conceptualising innovative ideas.
-                                        We explore the intersection of imagination and functionality to create designs that are both inspiring and practical.
-                                    </Typography>
-                                    <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-                                        <Chip label="CONCEPT" />
-                                        <Chip label="DESIGN" />
-                                        <Chip label="PROTOTYPE" />
-                                    </Box>
-                                </CardContent>
-                            </ServiceCard>
-                        </Grid>
 
-                        {/* CHINGU Experience */}
-                        <Grid item xs={12} md={4}>
-                            <ServiceCard elevation={3}>
-                                <CardMedia
-                                    component="div"
-                                    sx={{
-                                        height: 200,
-                                        backgroundColor: theme.palette.secondary.light,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <VrpanoIcon sx={{ fontSize: 80, color: 'white' }} />
-                                </CardMedia>
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography gutterBottom variant="h5" component="h3" fontWeight="bold">
-                                        CHINGU EXPERIENCE
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" paragraph>
-                                        Harnessing the power of modern technology to bring visions to life. We specialize in
-                                        utilizing advanced tools such as virtual reality (VR), rendering systems, CNC machines,
-                                        and 3D printers to create immersive, precise, and innovative designs.
-                                    </Typography>
-                                    <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-                                        <Chip label="VR" />
-                                        <Chip label="3D PRINTING" />
-                                        <Chip label="CNC" />
-                                    </Box>
-                                </CardContent>
-                            </ServiceCard>
-                        </Grid>
-
-                        {/* CHINGU Transcendence */}
-                        <Grid item xs={12} md={4}>
-                            <ServiceCard elevation={3}>
-                                <CardMedia
-                                    component="div"
-                                    sx={{
-                                        height: 200,
-                                        backgroundColor: theme.palette.error.light,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Architecture sx={{ fontSize: 80, color: 'white' }} />
-                                </CardMedia>
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography gutterBottom variant="h5" component="h3" fontWeight="bold">
-                                        CHINGU TRANSCENDENCE
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" paragraph>
-                                        Where imagination meets engineering excellence. We bring prototypes to life, merging creative
-                                        visions with technical expertise. Our collaborative approach ensures that every concept is
-                                        transformed into a functional and aesthetically pleasing reality.
-                                    </Typography>
-                                    <Box display="flex" flexWrap="wrap" gap={1} mt={2}>
-                                        <Chip label="ENGINEERING" />
-                                        <Chip label="PRODUCTION" />
-                                        <Chip label="REALIZATION" />
-                                    </Box>
-                                </CardContent>
-                            </ServiceCard>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+            <ChinguDivisionsGrid />
+           
 
             {/* Vision & Mission Section */}
             <Box py={10}>
