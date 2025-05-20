@@ -380,7 +380,7 @@ export default function RoboticsScreensaverMUI() {
                 background: 'linear-gradient(90deg, #0288d1 0%, #29b6f6 50%, #0288d1 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
-                color: 'transparent',
+                color: 'white',
                 fontWeight: 700,
                 letterSpacing: '0.5rem'
               }}
@@ -391,7 +391,7 @@ export default function RoboticsScreensaverMUI() {
               variant="h2" 
               sx={{ 
                 fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
-                color: 'text.secondary',
+                color: 'white',
                 fontWeight: 300,
                 letterSpacing: '0.3rem'
               }}
