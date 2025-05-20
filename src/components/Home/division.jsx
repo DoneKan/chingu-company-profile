@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Container, Grid, Typography, Card, CardContent, CardMedia, Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom'; // Import React Router Link
 
 // Styled components
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -12,6 +13,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   boxShadow: theme.shadows[5],
   transition: 'all 0.3s ease',
   position: 'relative',
+  cursor: 'pointer', // Add pointer cursor to indicate it's clickable
   '&:hover': {
     transform: 'translateY(-16px)',
     boxShadow: theme.shadows[15],
@@ -35,23 +37,6 @@ const NumberBadge = styled(Box)(({ color }) => ({
   backgroundColor: color,
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
 }));
-
-const VerticalBrand = styled(Typography)({
-  position: 'absolute',
-  top: '50%',
-  left: 16,
-  transform: 'translateY(-50%)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  opacity: 0.15,
-  fontWeight: 'bold',
-  fontSize: '1.5rem',
-  letterSpacing: '0.2em',
-  zIndex: 10,
-  writingMode: 'vertical-rl',
-  textOrientation: 'upright'
-});
 
 const IconContainer = styled(Box)(({ theme }) => ({
   transform: 'scale(1)',
@@ -82,68 +67,74 @@ const StyledChip = styled(Chip)(({ bgcolor }) => ({
   boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)'
 }));
 
-const DivisionCard = ({ division, color, number, icon, title, description, keywords }) => {
+// Custom Link component that wraps around the card to make the entire card a clickable link
+const CardLink = styled(RouterLink)(({ theme }) => ({
+  textDecoration: 'none', // Remove default underline
+  color: 'inherit', // Inherit text color
+  display: 'block', // Make the link fill the container
+  height: '100%', // Make the link fill the container
+}));
+
+const DivisionCard = ({ division, color, number, icon, title, description, keywords, slug }) => {
   return (
-    <StyledCard>
-      <NumberBadge color={color}>
-        {number}
-      </NumberBadge>
+    <CardLink to={`/${slug}`}>
+      <StyledCard>
+        <NumberBadge color={color}>
+          {number}
+        </NumberBadge>
 
-      <VerticalBrand>
-        HIGUCN
-      </VerticalBrand>
-
-      <CardMedia
-        component="div"
-        sx={{
-          height: 224,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          backgroundColor: color
-        }}
-      >
-        <IconContainer>
-          {icon}
-        </IconContainer>
-      </CardMedia>
-
-      <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        <Typography 
-          variant="h5" 
-          component="h3" 
-          sx={{ mb: 2, fontWeight: 'bold', position: 'relative', pb: 1 }}
+        <CardMedia
+          component="div"
+          sx={{
+            height: 224,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden',
+            backgroundColor: color
+          }}
         >
-          {title}
-          <TitleUnderline />
-        </Typography>
+          <IconContainer>
+            {icon}
+          </IconContainer>
+        </CardMedia>
 
-        <Typography 
-          variant="body2" 
-          sx={{ mb: 3, color: 'text.secondary' }}
-        >
-          {description}
-        </Typography>
+        <CardContent sx={{ flexGrow: 1, p: 3 }}>
+          <Typography 
+            variant="h5" 
+            component="h3" 
+            sx={{ mb: 2, fontWeight: 'bold', position: 'relative', pb: 1 }}
+          >
+            {title}
+            <TitleUnderline />
+          </Typography>
 
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 2 }}>
-          {keywords.map((keyword, index) => (
-            <StyledChip 
-              key={index} 
-              label={keyword}
-              size="small"
-              bgcolor={color}
-            />
-          ))}
-        </Box>
-      </CardContent>
-    </StyledCard>
+          <Typography 
+            variant="body2" 
+            sx={{ mb: 3, color: 'text.secondary' }}
+          >
+            {description}
+          </Typography>
+
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 2 }}>
+            {keywords.map((keyword, index) => (
+              <StyledChip 
+                key={index} 
+                label={keyword}
+                size="small"
+                bgcolor={color}
+              />
+            ))}
+          </Box>
+        </CardContent>
+      </StyledCard>
+    </CardLink>
   );
 };
 
 const ChinguDivisionsGrid = () => {
-  // Division data
+  // Division data with added slug for routing
   const divisions = [
     {
       id: '01',
@@ -152,6 +143,7 @@ const ChinguDivisionsGrid = () => {
       description: 'The Studio is a dynamic subdivision dedicated to playful design and conceptualising innovative ideas. We explore the intersection of imagination and functionality to create designs that are both inspiring and practical.',
       color: '#FF6B6B',
       keywords: ['CONCEPT', 'DESIGN', 'PROTOTYPE'],
+      slug: 'studio', // Add a slug for the URL
     },
     {
       id: '02',
@@ -160,6 +152,7 @@ const ChinguDivisionsGrid = () => {
       description: 'Harnessing the power of modern technology to bring visions to life. We specialize in utilizing advanced tools such as virtual reality (VR), rendering systems, CNC machines, and 3D printers to create immersive designs.',
       color: '#4ECDC4',
       keywords: ['VR', '3D PRINTING', 'CNC'],
+      slug: 'experience', // Add a slug for the URL
     },
     {
       id: '03',
@@ -168,6 +161,7 @@ const ChinguDivisionsGrid = () => {
       description: 'Where imagination meets engineering excellence. We bring prototypes to life, merging creative visions with technical expertise. Our collaborative approach ensures that every concept is transformed into reality.',
       color: '#6C63FF',
       keywords: ['ENGINEERING', 'PRODUCTION', 'REALIZATION'],
+      slug: 'transcendence', // Add a slug for the URL
     },
     {
       id: '04',
@@ -176,11 +170,12 @@ const ChinguDivisionsGrid = () => {
       description: 'At Chingu we believe in bridging the gap between imagination and creation. Our mission is to transform visionary ideas into tangible realities, utilizing art and design in collaboration with latest advancements in technology.',
       color: '#FFD166',
       keywords: ['INNOVATION', 'SUSTAINABILITY', 'TECHNOLOGY'],
+      slug: 'about', // Add a slug for the URL
     }
   ];
 
   return (
-    <Box sx={{ py: 8, bgcolor: 'grey.50' }}>
+    <Box sx={{ py: 8, bgcolor: '' }}>
       <Container>
         <Typography 
           variant="h3" 
@@ -216,6 +211,7 @@ const ChinguDivisionsGrid = () => {
                 title={division.title}
                 description={division.description}
                 keywords={division.keywords}
+                slug={division.slug}
               />
             </Grid>
           ))}
