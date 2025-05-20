@@ -36,22 +36,7 @@ const NumberBadge = styled(Box)(({ color }) => ({
   boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)'
 }));
 
-const VerticalBrand = styled(Typography)({
-  position: 'absolute',
-  top: '50%',
-  left: 16,
-  transform: 'translateY(-50%)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  opacity: 0.15,
-  fontWeight: 'bold',
-  fontSize: '1.5rem',
-  letterSpacing: '0.2em',
-  zIndex: 10,
-  writingMode: 'vertical-rl',
-  textOrientation: 'upright'
-});
+
 
 const IconContainer = styled(Box)(({ theme }) => ({
   transform: 'scale(1)',
@@ -89,9 +74,7 @@ const DivisionCard = ({ division, color, number, icon, title, description, keywo
         {number}
       </NumberBadge>
 
-      <VerticalBrand>
-        HIGUCN
-      </VerticalBrand>
+      
 
       <CardMedia
         component="div"
