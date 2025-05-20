@@ -1,11 +1,10 @@
-import React from 'react';
 import { Container, Box, Typography, Grid, useTheme, useMediaQuery } from '@mui/material';
 
 // Import components
 import Hero3D from "../components/Chingu-Studio/Hero3D";
 import ProjectShowcase from "../components/Chingu-Studio/ProjectShowcase";
 import DesignProcess from "../components/Chingu-Studio/DesignProcess";
-import ServiceCard from "../components/Chingu-Studio/ServiceCard";
+import ServiceCard from "../components/Chingu-Studio/serviceCard";
 import PortfolioGrid from "../components/Chingu-Studio/PortfolioGrid";
 import InteractiveCanvas from "../components/Chingu-Studio/InteractiveCanvas";
 import ImagePlaceholder from "../components/Chingu-Studio/ImagePlaceholder";
