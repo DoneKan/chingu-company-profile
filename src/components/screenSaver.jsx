@@ -1,11 +1,53 @@
 import { useState, useEffect, useRef } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  ThemeProvider, 
+  createTheme, 
+  CssBaseline,
+  Chip,
+  Avatar
+} from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 
-export default function AstroScreensaver() {
-  const theme = useTheme();
+// Create custom dark theme
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#0288d1', // Blue
+    },
+    secondary: {
+      main: '#00e5ff', // Cyan
+    },
+    background: {
+      default: '#0a0c14',
+      paper: '#1a1e2c',
+    },
+    text: {
+      primary: '#e0e0f0',
+      secondary: '#a0a8c0',
+    },
+  },
+  typography: {
+    fontFamily: '"Rajdhani", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+      letterSpacing: '0.5rem',
+    },
+    h2: {
+      fontWeight: 300,
+      letterSpacing: '0.2rem',
+    },
+  },
+});
+
+export default function RoboticsScreensaverMUI() {
   const canvasRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  
+
   // Handle resize
   useEffect(() => {
     const updateDimensions = () => {
@@ -20,8 +62,8 @@ export default function AstroScreensaver() {
     
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
-  
-  // Astro lines animation
+
+  // Robotics gears animation
   useEffect(() => {
     if (!canvasRef.current) return;
     
@@ -32,22 +74,104 @@ export default function AstroScreensaver() {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
     
-    // Create stars
-    const stars = Array.from({ length: 80 }, () => ({
+    // Create gears
+    const gears = Array.from({ length: 15 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 0.5 + 0.1
+      radius: Math.random() * 40 + 20,
+      teeth: Math.floor(Math.random() * 8) + 8,
+      rotationSpeed: (Math.random() * 0.01) + 0.005,
+      rotation: Math.random() * Math.PI * 2,
+      color: `rgba(${Math.floor(Math.random() * 30)}, ${Math.floor(Math.random() * 150) + 100}, ${Math.floor(Math.random() * 100) + 155}, 0.7)`
     }));
     
-    // Create connection points
-    const points = Array.from({ length: 10 }, () => ({
+    // Create connection nodes (circuit-like points)
+    const nodes = Array.from({ length: 20 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
+      vx: (Math.random() - 0.5) * 1.2,
+      vy: (Math.random() - 0.5) * 1.2,
+      radius: Math.random() * 3 + 2,
       connections: []
     }));
+    
+    // Draw a gear
+    const drawGear = (x, y, outerRadius, innerRadius, teeth, toothDepth, rotation, color) => {
+      ctx.beginPath();
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      
+      const toothAngle = (2 * Math.PI) / teeth;
+      
+      for (let i = 0; i < teeth; i++) {
+        const angle = i * toothAngle;
+        
+        // Move to inner point of current tooth
+        ctx.lineTo(
+          innerRadius * Math.cos(angle),
+          innerRadius * Math.sin(angle)
+        );
+        
+        // Draw to outer point of current tooth
+        ctx.lineTo(
+          outerRadius * Math.cos(angle + toothAngle / 4),
+          outerRadius * Math.sin(angle + toothAngle / 4)
+        );
+        
+        // Draw to outer point of current tooth
+        ctx.lineTo(
+          outerRadius * Math.cos(angle + toothAngle / 2),
+          outerRadius * Math.sin(angle + toothAngle / 2)
+        );
+        
+        // Back to inner point of next tooth
+        ctx.lineTo(
+          innerRadius * Math.cos(angle + toothAngle * 3/4),
+          innerRadius * Math.sin(angle + toothAngle * 3/4)
+        );
+      }
+      
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      
+      // Draw inner circle
+      ctx.beginPath();
+      ctx.arc(0, 0, innerRadius * 0.6, 0, Math.PI * 2);
+      ctx.fillStyle = '#111a2e';
+      ctx.fill();
+      
+      // Draw center hole
+      ctx.beginPath();
+      ctx.arc(0, 0, innerRadius * 0.2, 0, Math.PI * 2);
+      ctx.fillStyle = '#060a14';
+      ctx.fill();
+      
+      ctx.restore();
+    };
+    
+    // Draw 3D circuit line
+    const drawCircuitLine = (x1, y1, x2, y2) => {
+      const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+      gradient.addColorStop(0, 'rgba(0, 195, 255, 0.8)');
+      gradient.addColorStop(1, 'rgba(0, 140, 255, 0.2)');
+      
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Add glow effect
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = 'rgba(0, 200, 255, 0.3)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    };
     
     // Animation loop
     const animate = () => {
@@ -56,60 +180,93 @@ export default function AstroScreensaver() {
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw stars
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-      stars.forEach(star => {
+      // Draw background grid (subtle tech pattern)
+      ctx.strokeStyle = 'rgba(40, 50, 90, 0.1)';
+      ctx.lineWidth = 1;
+      const gridSize = 30;
+      
+      for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Move stars
-        star.y += star.speed;
-        if (star.y > canvas.height) {
-          star.y = 0;
-          star.x = Math.random() * canvas.width;
-        }
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+      
+      // Update and draw gears
+      gears.forEach(gear => {
+        gear.rotation += gear.rotationSpeed;
+        drawGear(
+          gear.x,
+          gear.y,
+          gear.radius,
+          gear.radius * 0.7,
+          gear.teeth,
+          gear.radius * 0.2,
+          gear.rotation,
+          gear.color
+        );
       });
       
-      // Update points
-      points.forEach(point => {
-        point.x += point.vx;
-        point.y += point.vy;
+      // Update nodes
+      nodes.forEach(node => {
+        node.x += node.vx;
+        node.y += node.vy;
         
         // Bounce off edges
-        if (point.x < 0 || point.x > canvas.width) point.vx *= -1;
-        if (point.y < 0 || point.y > canvas.height) point.vy *= -1;
+        if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+        if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
         
-        point.connections = [];
+        node.connections = [];
       });
       
-      // Find connections
-      for (let i = 0; i < points.length; i++) {
-        for (let j = i + 1; j < points.length; j++) {
-          const dx = points[i].x - points[j].x;
-          const dy = points[i].y - points[j].y;
+      // Find connections between nodes
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 200) {
-            points[i].connections.push(j);
-            points[j].connections.push(i);
+          if (distance < 180) {
+            nodes[i].connections.push(j);
+            nodes[j].connections.push(i);
           }
         }
       }
       
       // Draw connections
-      ctx.strokeStyle = 'rgba(200, 200, 255, 0.5)';
-      ctx.lineWidth = 1;
-      
-      points.forEach((point, i) => {
-        point.connections.forEach(j => {
+      nodes.forEach((node, i) => {
+        node.connections.forEach(j => {
           if (i < j) { // Avoid drawing lines twice
-            ctx.beginPath();
-            ctx.moveTo(point.x, point.y);
-            ctx.lineTo(points[j].x, points[j].y);
-            ctx.stroke();
+            drawCircuitLine(node.x, node.y, nodes[j].x, nodes[j].y);
           }
         });
+      });
+      
+      // Draw nodes
+      nodes.forEach(node => {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 195, 255, 0.8)';
+        ctx.fill();
+        
+        // Add glow
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(
+          node.x, node.y, node.radius,
+          node.x, node.y, node.radius * 2
+        );
+        gradient.addColorStop(0, 'rgba(0, 195, 255, 0.3)');
+        gradient.addColorStop(1, 'rgba(0, 195, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
       });
       
       requestAnimationFrame(animate);
@@ -121,166 +278,182 @@ export default function AstroScreensaver() {
       cancelAnimationFrame(animationId);
     };
   }, [dimensions]);
-  
+
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        width: '100%',
-        height: '100vh', 
-        bgcolor: 'black',
-        overflow: 'hidden'
-      }}
-    >
-      {/* Background gradient overlay */}
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
       <Box
         sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          background: 'linear-gradient(to bottom right, rgba(30, 64, 175, 0.4), rgba(0, 0, 0, 0.8))',
-          zIndex: 10
-        }}
-      />
-      
-      {/* Canvas for astro lines */}
-      <Box
-        component="canvas"
-        ref={canvasRef}
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          display: 'block',
-          zIndex: 20
-        }}
-      />
-      
-      {/* Background image */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          backgroundImage: `url('/api/placeholder/1920/1080')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: 0.6,
-          filter: 'brightness(0.4) contrast(1.2)',
-          zIndex: 0
-        }}
-      />
-      
-      {/* Centered content */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 30
+          position: 'relative',
+          width: '100%',
+          height: '100vh',
+          overflow: 'hidden',
+          bgcolor: 'background.default',
         }}
       >
-        {/* Logo at top */}
-        <Box sx={{ mb: 4 }}>
+        {/* Background gradient overlay */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(13, 71, 161, 0.3) 0%, rgba(10, 12, 20, 0.9) 100%)',
+            zIndex: 10,
+          }}
+        />
+        
+        {/* Canvas for robotics animation */}
+        <Box
+          component="canvas"
+          ref={canvasRef}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'block',
+            zIndex: 20,
+          }}
+        />
+        
+        {/* Background texture */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'url("/api/placeholder/1920/1080")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.25,
+            filter: 'brightness(0.3) contrast(1.25)',
+            zIndex: 0,
+          }}
+        />
+        
+        {/* Centered content */}
+        <Container
+          maxWidth={false}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 30,
+          }}
+        >
+          {/* Logo at top */}
           <Box
             sx={{
-              width: 96,
-              height: 96,
+              mb: 6,
+              position: 'relative',
+              width: 100,
+              height: 100,
               borderRadius: '50%',
-              bgcolor: 'black',
+              bgcolor: 'rgba(25, 35, 60, 0.85)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '2px solid white'
+              border: '2px solid',
+              borderColor: 'primary.light',
+              boxShadow: '0 0 30px rgba(0, 229, 255, 0.3)',
             }}
           >
-            <Box
+            <Avatar
               sx={{
-                width: 48,
-                height: 48,
-                bgcolor: 'white',
-                position: 'relative'
+                width: 60,
+                height: 60,
+                bgcolor: 'transparent',
+                color: theme => theme.palette.primary.light,
               }}
             >
-              <Box
-                sx={{
-                  position: 'absolute',
-                  width: '100%',
-                  height: '100%',
-                  clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'
-                }}
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  width: '33%',
-                  height: '33%',
-                  bgcolor: 'black',
-                  top: '33%',
-                  left: '33%'
-                }}
-              />
-            </Box>
+              <SettingsIcon sx={{ fontSize: 40, animation: 'spin 10s linear infinite' }} />
+            </Avatar>
           </Box>
-        </Box>
+          
+          {/* Text */}
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography 
+              variant="h1" 
+              sx={{ 
+                fontSize: { xs: '3rem', sm: '4rem', md: '5rem' },
+                mb: 1,
+                textShadow: '0 0 15px rgba(0, 229, 255, 0.5)',
+                background: 'linear-gradient(90deg, #0288d1 0%, #29b6f6 50%, #0288d1 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                fontWeight: 700,
+                letterSpacing: '0.5rem'
+              }}
+            >
+              CHINGU
+            </Typography>
+            <Typography 
+              variant="h2" 
+              sx={{ 
+                fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
+                color: 'text.secondary',
+                fontWeight: 300,
+                letterSpacing: '0.3rem'
+              }}
+            >
+              CUT ACROSS
+            </Typography>
+          </Box>
+          
+          {/* Animated badge below text */}
+          <Box 
+            sx={{ 
+              mt: 6,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0.8
+            }}
+          >
+            <PrecisionManufacturingIcon sx={{ mr: 1, color: 'secondary.main' }} />
+            <Typography variant="body2" sx={{ color: 'secondary.light' }}>
+              ADVANCED SYSTEMS
+            </Typography>
+          </Box>
+        </Container>
         
-        {/* Text */}
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography 
-            variant="h1" 
-            sx={{ 
-              color: 'white',
-              fontSize: '6rem',
-              fontWeight: 700,
-              letterSpacing: '0.5rem',
-              mb: 2
-            }}
-          >
-            CHINGU
-          </Typography>
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              color: 'white',
-              fontSize: '2.5rem',
-              fontWeight: 300,
-              letterSpacing: '0.25rem'
-            }}
-          >
-            entreprises UG
-          </Typography>
-        </Box>
+        {/* Development watermark */}
+        <Chip
+          label="DEV MODE"
+          color="primary"
+          variant="outlined"
+          size="small"
+          icon={<Box sx={{ fontSize: 14, fontWeight: 'bold' }}>1</Box>}
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            bgcolor: 'rgba(25, 118, 210, 0.15)',
+            backdropFilter: 'blur(5px)',
+            zIndex: 40,
+            px: 1,
+            borderRadius: 1,
+            '& .MuiChip-icon': {
+              ml: 0.5,
+              mr: -0.5,
+            }
+          }}
+        />
+        
+        {/* Add keyframes for spin animation */}
+        <Box
+          sx={{
+            '@keyframes spin': {
+              '0%': {
+                transform: 'rotate(0deg)',
+              },
+              '100%': {
+                transform: 'rotate(360deg)',
+              },
+            },
+          }}
+        />
       </Box>
-      
-      {/*logo/watermark in corner */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 16,
-          right: 16,
-          color: 'white',
-          bgcolor: 'rgba(255, 255, 255, 0.1)',
-          px: 1.5,
-          py: 0.5,
-          borderRadius: 1,
-          zIndex: 40
-        }}
-      >
-        <Typography component="span" sx={{ fontWeight: 'bold' }}>1</Typography>
-        <Typography component="span" sx={{ fontSize: '0.875rem', ml: 0.5 }}>DEV MODE</Typography>
-      </Box>
-    </Box>
+    </ThemeProvider>
   );
 }
