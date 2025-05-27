@@ -9,6 +9,8 @@ import  NotFound  from './pages/NotFound';
 import AboutUs from './pages/AboutUs';
 import ChinguStudioPage from './pages/chingu-studio';
 import { CssBaseline } from '@mui/material';
+import ChinguExperience from './pages/chingu-exp';
+import ArchitectProjectShowcase from './pages/chingu-trans';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Route path="/" element={<ChinguHomePage />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/studio" element={<ChinguStudioPage />} />
+            <Route path="/experience" element={<ChinguExperience />} />
+             <Route path="/transcendence" element={<ArchitectProjectShowcase />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
           </Routes>
