@@ -275,16 +275,18 @@ const ProjectCard = React.memo(({ project, isListView = false }) => {
                     color="text.secondary"
                     sx={{
                         display: '-webkit-box',
-                        WebkitLineClamp: 3,
+                        WebkitLineClamp: { xs: 2, md: 3 }, // Fewer lines on mobile
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
-                        lineHeight: 1.5,
+                        lineHeight: 1.4,
                         mb: 2,
-                        flexGrow: 1
+                        flexGrow: 1,
+                        fontSize: { xs: '0.8rem', md: '0.875rem' } // Smaller text on mobile
                     }}
                 >
                     {project.description}
                 </Typography>
+
 
                 <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
                     {project.tags.map((tag, index) => (
@@ -364,22 +366,28 @@ export default function OptimizedProjectShowcase() {
                 sx={{
                     background: 'linear-gradient(135deg, #1e293b 0%, #7c3aed 50%, #1e293b 100%)',
                     color: 'white',
-                    py: 8,
+                    py: { xs: 4, md: 8 }, // Reduced padding on mobile
                     position: 'relative',
                     overflow: 'hidden'
                 }}
             >
-                <Container maxWidth="lg">
-                    <Stack direction="row" alignItems="center" spacing={3} sx={{ mb: 3 }}>
+                <Container maxWidth="lg" sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, md: 3 } }}>
+                    {/* Better mobile padding */}
+                    <Stack
+                        direction={{ xs: 'column', md: 'row' }} // Stack vertically on mobile
+                        alignItems={{ xs: 'center', md: 'flex-start' }}
+                        spacing={{ xs: 2, md: 3 }}
+                        sx={{ mb: 3, textAlign: { xs: 'center', md: 'left' } }} // Center on mobile
+                    >
                         <Avatar
                             sx={{
-                                width: 64,
-                                height: 64,
+                                width: { xs: 48, md: 64 }, // Smaller on mobile
+                                height: { xs: 48, md: 64 },
                                 bgcolor: 'rgba(255,255,255,0.15)',
                                 backdropFilter: 'blur(10px)'
                             }}
                         >
-                            <Architecture sx={{ fontSize: 32 }} />
+                            <Architecture sx={{ fontSize: { xs: 24, md: 32 } }} />
                         </Avatar>
                         <Box>
                             <Typography
@@ -389,7 +397,7 @@ export default function OptimizedProjectShowcase() {
                                 sx={{
                                     letterSpacing: 1,
                                     textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                                    fontSize: { xs: '2.5rem', md: '3.75rem' }
+                                    fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.75rem' } // Much smaller on mobile
                                 }}
                             >
                                 CHINGU TRANSCENDENCE
@@ -400,7 +408,9 @@ export default function OptimizedProjectShowcase() {
                                     opacity: 0.9,
                                     maxWidth: 700,
                                     mt: 1,
-                                    fontWeight: 300
+                                    fontWeight: 300,
+                                    fontSize: { xs: '0.9rem', md: '1.25rem' }, // Smaller on mobile
+                                    px: { xs: 1, md: 0 } // Small padding on mobile
                                 }}
                             >
                                 Where imagination meets engineering excellence. We bring prototypes to life,
@@ -409,17 +419,27 @@ export default function OptimizedProjectShowcase() {
                         </Box>
                     </Stack>
 
-                    <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                    <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{
+                            flexWrap: 'wrap',
+                            gap: 1,
+                            justifyContent: { xs: 'center', md: 'flex-start' } // Center on mobile
+                        }}
+                    >
                         {['ENGINEERING', 'PRODUCTION', 'REALIZATION'].map((tag) => (
                             <Chip
                                 key={tag}
                                 label={tag}
+                                size="small" // Fixed: use string instead of object
                                 sx={{
                                     bgcolor: 'rgba(255,255,255,0.2)',
                                     color: 'white',
                                     fontWeight: 700,
                                     backdropFilter: 'blur(10px)',
-                                    border: '1px solid rgba(255,255,255,0.2)'
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    fontSize: { xs: '0.7rem', md: '0.8rem' }
                                 }}
                                 variant="outlined"
                             />
@@ -428,16 +448,19 @@ export default function OptimizedProjectShowcase() {
                 </Container>
             </Paper>
 
+
+
             {/* Controls Section */}
-           <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Container maxWidth="lg" sx={{ py: 4 }}>
                 {/* Modern Filter Bar */}
-                <Box sx={{ 
+                <Box sx={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    borderRadius: 4,
-                    p: 4,
+                    borderRadius: { xs: 2, md: 4 }, // Less rounded on mobile
+                    p: { xs: 2, md: 4 }, // Less padding on mobile
                     mb: 4,
                     position: 'relative',
                     overflow: 'hidden',
+                    mx: { xs: 1, md: 0 }, // Small margin on mobile
                     '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -450,28 +473,46 @@ export default function OptimizedProjectShowcase() {
                     }
                 }}>
                     <Box sx={{ position: 'relative', zIndex: 1 }}>
-                        <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                color: 'white',
+                                fontWeight: 700,
+                                mb: 1,
+                                fontSize: { xs: '1.5rem', md: '2.125rem' }, // Smaller on mobile
+                                textAlign: { xs: 'center', md: 'left' }
+                            }}
+                        >
                             Project Dashboard
                         </Typography>
-                        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', mb: 4 }}>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: 'rgba(255,255,255,0.8)',
+                                mb: { xs: 3, md: 4 },
+                                fontSize: { xs: '0.9rem', md: '1rem' },
+                                textAlign: { xs: 'center', md: 'left' }
+                            }}
+                        >
                             Discover and manage your project portfolio
                         </Typography>
-                        
+
                         <Stack
-                            direction={{ xs: 'column', lg: 'row' }}
-                            spacing={3}
-                            alignItems={{ xs: 'stretch', lg: 'center' }}
+                            direction="column" // Always stack vertically on mobile
+                            spacing={2}
+                            alignItems="stretch"
                         >
                             {/* Enhanced Search */}
                             <TextField
                                 fullWidth
-                                placeholder="Search projects, teams, or technologies..."
+                                placeholder="Search projects..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
+                                size="small" // Fixed: use string instead of object
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <Search sx={{ color: 'rgba(0,0,0,0.6)' }} />
+                                            <Search sx={{ color: 'rgba(0,0,0,0.6)', fontSize: { xs: 20, md: 24 } }} />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -479,7 +520,8 @@ export default function OptimizedProjectShowcase() {
                                     '& .MuiOutlinedInput-root': {
                                         backgroundColor: 'rgba(255,255,255,0.95)',
                                         backdropFilter: 'blur(10px)',
-                                        borderRadius: 3,
+                                        borderRadius: { xs: 2, md: 3 },
+                                        fontSize: { xs: '0.9rem', md: '1rem' },
                                         '&:hover': {
                                             backgroundColor: 'rgba(255,255,255,1)',
                                         },
@@ -490,88 +532,74 @@ export default function OptimizedProjectShowcase() {
                                 }}
                             />
 
-                            {/* Phase Filter */}
-                            <FormControl sx={{ minWidth: 220 }}>
-                                
-                                <Select
-                                    value={selectedPhase}
-                                    label="Project Phase"
-                                    onChange={(e) => setSelectedPhase(e.target.value)}
-                                    sx={{
-                                        backgroundColor: 'rgba(255,255,255,0.95)',
-                                        backdropFilter: 'blur(10px)',
-                                        borderRadius: 3,
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(255,255,255,1)',
-                                        },
-                                        '&.Mui-focused': {
-                                            backgroundColor: 'rgba(255,255,255,1)',
-                                        }
-                                    }}
-                                >
-                                    {phases.map((phase) => (
-                                        <MenuItem key={phase} value={phase}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <Box sx={{
-                                                    width: 8,
-                                                    height: 8,
-                                                    borderRadius: '50%',
-                                                    backgroundColor: phase === 'Completed' ? '#4caf50' : 
-                                                                   phase === 'Development' ? '#2196f3' :
-                                                                   phase === 'Testing' ? '#ff9800' : '#9e9e9e'
-                                                }} />
+                            <Stack direction="row" spacing={2} alignItems="center">
+                                {/* Phase Filter */}
+                                <FormControl sx={{ flex: 1, minWidth: 120 }}>
+                                    <Select
+                                        value={selectedPhase}
+                                        onChange={(e) => setSelectedPhase(e.target.value)}
+                                        size="small" // Always small on mobile
+                                        sx={{
+                                            backgroundColor: 'rgba(255,255,255,0.95)',
+                                            backdropFilter: 'blur(10px)',
+                                            borderRadius: 2,
+                                            fontSize: '0.9rem',
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(255,255,255,1)',
+                                            },
+                                            '&.Mui-focused': {
+                                                backgroundColor: 'rgba(255,255,255,1)',
+                                            }
+                                        }}
+                                    >
+                                        {phases.map((phase) => (
+                                            <MenuItem key={phase} value={phase} sx={{ fontSize: '0.9rem' }}>
                                                 {phase}
-                                            </Box>
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
-                            {/* View Toggle */}
-                            <Box sx={{
-                                backgroundColor: 'rgba(255,255,255,0.95)',
-                                backdropFilter: 'blur(10px)',
-                                borderRadius: 3,
-                                p: 0.5,
-                                display: 'flex'
-                            }}>
-                                <IconButton
-                                    onClick={() => setViewMode('grid')}
-                                    sx={{
-                                        borderRadius: 2,
-                                        px: 2,
-                                        backgroundColor: viewMode === 'grid' ? 'primary.main' : 'transparent',
-                                        color: viewMode === 'grid' ? 'white' : 'text.primary',
-                                        '&:hover': {
-                                            backgroundColor: viewMode === 'grid' ? 'primary.dark' : 'action.hover',
-                                        }
-                                    }}
-                                >
-                                    <ViewModule />
-                                </IconButton>
-                                <IconButton
-                                    onClick={() => setViewMode('list')}
-                                    sx={{  
-                                        borderRadius: 2,
-                                        px: 2,
-                                        backgroundColor: viewMode === 'list' ? 'primary.main' : 'transparent',
-                                        color: viewMode === 'list' ? 'white' : 'text.primary',
-                                        '&:hover': {
-                                            backgroundColor: viewMode === 'list' ? 'primary.dark' : 'action.hover',
-                                        }
-                                    }}
-                                >
-                                    <ViewList />
-                                </IconButton>
-                            </Box>
+                                {/* View Toggle - Compact for mobile */}
+                                <Box sx={{
+                                    backgroundColor: 'rgba(255,255,255,0.95)',
+                                    backdropFilter: 'blur(10px)',
+                                    borderRadius: 2,
+                                    p: 0.5,
+                                    display: 'flex'
+                                }}>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => setViewMode('grid')}
+                                        sx={{
+                                            borderRadius: 1,
+                                            backgroundColor: viewMode === 'grid' ? 'primary.main' : 'transparent',
+                                            color: viewMode === 'grid' ? 'white' : 'text.primary',
+                                        }}
+                                    >
+                                        <ViewModule fontSize="small" />
+                                    </IconButton>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => setViewMode('list')}
+                                        sx={{
+                                            borderRadius: 1,
+                                            backgroundColor: viewMode === 'list' ? 'primary.main' : 'transparent',
+                                            color: viewMode === 'list' ? 'white' : 'text.primary',
+                                        }}
+                                    >
+                                        <ViewList fontSize="small" />
+                                    </IconButton>
+                                </Box>
+                            </Stack>
                         </Stack>
                     </Box>
                 </Box>
 
                 {/* Enhanced Results Summary */}
-                <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                     mb: 4,
                     p: 3,
@@ -591,16 +619,16 @@ export default function OptimizedProjectShowcase() {
                             {selectedPhase === 'All Phases' && 'Showing all projects'}
                         </Typography>
                     </Box>
-                    
+
                     <Stack direction="row" spacing={1}>
-                        <Chip 
+                        <Chip
                             icon={<TrendingUp sx={{ fontSize: 16 }} />}
                             label="Active"
                             variant="outlined"
                             size="small"
                             color="success"
                         />
-                        <Chip 
+                        <Chip
                             label={`${viewMode} view`}
                             variant="outlined"
                             size="small"
@@ -609,9 +637,9 @@ export default function OptimizedProjectShowcase() {
                 </Box>
 
                 {/* Projects Grid with enhanced styling */}
-                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                <Grid container spacing={{ xs: 2, md: 3 }}  columns={{ xs: 4, sm: 8, md: 12 }}>
                     {filteredProjects.map((project) => (
-                        <Grid key={project.id} size={{ xs: 2, sm: 4 }}>
+                        <Grid key={project.id} size={{ sm: 4 }}>
                             <Box sx={{
                                 position: 'relative',
                                 height: '100%',
@@ -625,6 +653,7 @@ export default function OptimizedProjectShowcase() {
                         </Grid>
                     ))}
                 </Grid>
+
 
                 {/* Enhanced Empty State */}
                 {filteredProjects.length === 0 && (
@@ -658,17 +687,17 @@ export default function OptimizedProjectShowcase() {
                         }}>
                             <FilterList sx={{ fontSize: 48, color: 'white', zIndex: 1 }} />
                         </Box>
-                        
+
                         <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', mb: 2 }}>
                             No projects match your search
                         </Typography>
                         <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 500, mx: 'auto' }}>
                             We couldn't find any projects matching your current filters. Try broadening your search criteria or exploring different project phases.
                         </Typography>
-                        
+
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
-                            <Button 
-                                variant="outlined" 
+                            <Button
+                                variant="outlined"
                                 onClick={() => {
                                     setSearchTerm('');
                                     setSelectedPhase('All Phases');
@@ -677,9 +706,9 @@ export default function OptimizedProjectShowcase() {
                             >
                                 Clear Filters
                             </Button>
-                            <Button 
-                                variant="contained" 
-                                sx={{ 
+                            <Button
+                                variant="contained"
+                                sx={{
                                     borderRadius: 2,
                                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                                 }}
