@@ -36,6 +36,7 @@ import {
     AccountBalance,
     FilterList
 } from '@mui/icons-material';
+import { TrendingUp } from 'lucide-react';
 
 // Project data with proper MUI structure
 const projectData = [
@@ -428,125 +429,265 @@ export default function OptimizedProjectShowcase() {
             </Paper>
 
             {/* Controls Section */}
-            <Container maxWidth="lg" sx={{ py: 4 }}>
-                <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
-                    <Stack
-                        direction={{ xs: 'column', md: 'row' }}
-                        spacing={3}
-                        alignItems={{ xs: 'stretch', md: 'center' }}
-                    >
-                        <TextField
-                            fullWidth
-                            placeholder="Search projects..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search color="action" />
-                                    </InputAdornment>
-                                ),
-                            }}
+           <Container maxWidth="lg" sx={{ py: 4 }}>
+                {/* Modern Filter Bar */}
+                <Box sx={{ 
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    borderRadius: 4,
+                    p: 4,
+                    mb: 4,
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(10px)',
+                    }
+                }}>
+                    <Box sx={{ position: 'relative', zIndex: 1 }}>
+                        <Typography variant="h4" sx={{ color: 'white', fontWeight: 700, mb: 1 }}>
+                            Project Dashboard
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.8)', mb: 4 }}>
+                            Discover and manage your project portfolio
+                        </Typography>
+                        
+                        <Stack
+                            direction={{ xs: 'column', lg: 'row' }}
+                            spacing={3}
+                            alignItems={{ xs: 'stretch', lg: 'center' }}
+                        >
+                            {/* Enhanced Search */}
+                            <TextField
+                                fullWidth
+                                placeholder="Search projects, teams, or technologies..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Search sx={{ color: 'rgba(0,0,0,0.6)' }} />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                sx={{
+                                    '& .MuiOutlinedInput-root': {
+                                        backgroundColor: 'rgba(255,255,255,0.95)',
+                                        backdropFilter: 'blur(10px)',
+                                        borderRadius: 3,
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255,255,255,1)',
+                                        },
+                                        '&.Mui-focused': {
+                                            backgroundColor: 'rgba(255,255,255,1)',
+                                        }
+                                    }
+                                }}
+                            />
+
+                            {/* Phase Filter */}
+                            <FormControl sx={{ minWidth: 220 }}>
+                                
+                                <Select
+                                    value={selectedPhase}
+                                    label="Project Phase"
+                                    onChange={(e) => setSelectedPhase(e.target.value)}
+                                    sx={{
+                                        backgroundColor: 'rgba(255,255,255,0.95)',
+                                        backdropFilter: 'blur(10px)',
+                                        borderRadius: 3,
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255,255,255,1)',
+                                        },
+                                        '&.Mui-focused': {
+                                            backgroundColor: 'rgba(255,255,255,1)',
+                                        }
+                                    }}
+                                >
+                                    {phases.map((phase) => (
+                                        <MenuItem key={phase} value={phase}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <Box sx={{
+                                                    width: 8,
+                                                    height: 8,
+                                                    borderRadius: '50%',
+                                                    backgroundColor: phase === 'Completed' ? '#4caf50' : 
+                                                                   phase === 'Development' ? '#2196f3' :
+                                                                   phase === 'Testing' ? '#ff9800' : '#9e9e9e'
+                                                }} />
+                                                {phase}
+                                            </Box>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            {/* View Toggle */}
+                            <Box sx={{
+                                backgroundColor: 'rgba(255,255,255,0.95)',
+                                backdropFilter: 'blur(10px)',
+                                borderRadius: 3,
+                                p: 0.5,
+                                display: 'flex'
+                            }}>
+                                <IconButton
+                                    onClick={() => setViewMode('grid')}
+                                    sx={{
+                                        borderRadius: 2,
+                                        px: 2,
+                                        backgroundColor: viewMode === 'grid' ? 'primary.main' : 'transparent',
+                                        color: viewMode === 'grid' ? 'white' : 'text.primary',
+                                        '&:hover': {
+                                            backgroundColor: viewMode === 'grid' ? 'primary.dark' : 'action.hover',
+                                        }
+                                    }}
+                                >
+                                    <ViewModule />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => setViewMode('list')}
+                                    sx={{  
+                                        borderRadius: 2,
+                                        px: 2,
+                                        backgroundColor: viewMode === 'list' ? 'primary.main' : 'transparent',
+                                        color: viewMode === 'list' ? 'white' : 'text.primary',
+                                        '&:hover': {
+                                            backgroundColor: viewMode === 'list' ? 'primary.dark' : 'action.hover',
+                                        }
+                                    }}
+                                >
+                                    <ViewList />
+                                </IconButton>
+                            </Box>
+                        </Stack>
+                    </Box>
+                </Box>
+
+                {/* Enhanced Results Summary */}
+                <Box sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center',
+                    mb: 4,
+                    p: 3,
+                    backgroundColor: 'grey.50',
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'grey.200'
+                }}>
+                    <Box>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                            {filteredProjects.length} Projects Found
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {selectedPhase !== 'All Phases' && (
+                                <>Filtered by <Chip label={selectedPhase} size="small" color="primary" sx={{ ml: 0.5 }} /></>
+                            )}
+                            {selectedPhase === 'All Phases' && 'Showing all projects'}
+                        </Typography>
+                    </Box>
+                    
+                    <Stack direction="row" spacing={1}>
+                        <Chip 
+                            icon={<TrendingUp sx={{ fontSize: 16 }} />}
+                            label="Active"
                             variant="outlined"
-                            sx={{ flexGrow: 1 }}
+                            size="small"
+                            color="success"
                         />
-
-                        <FormControl sx={{ minWidth: 200 }}>
-                            <InputLabel>Phase</InputLabel>
-                            <Select
-                                value={selectedPhase}
-                                label="Phase"
-                                onChange={(e) => setSelectedPhase(e.target.value)}
-                            >
-                                {phases.map((phase) => (
-                                    <MenuItem key={phase} value={phase}>
-                                        {phase}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-
-                        <Paper elevation={1} sx={{ borderRadius: 1, overflow: 'hidden' }}>
-                            <Stack direction="row">
-                                <Tooltip title="Grid View">
-                                    <IconButton
-                                        onClick={() => setViewMode('grid')}
-                                        color={viewMode === 'grid' ? 'primary' : 'default'}
-                                        sx={{
-                                            borderRadius: 0,
-                                            bgcolor: viewMode === 'grid' ? 'action.selected' : 'transparent'
-                                        }}
-                                    >
-                                        <ViewModule />
-                                    </IconButton>
-                                </Tooltip>
-                                <Divider orientation="vertical" flexItem />
-                                <Tooltip title="List View">
-                                    <IconButton
-                                        onClick={() => setViewMode('list')}
-                                        color={viewMode === 'list' ? 'primary' : 'default'}
-                                        sx={{
-                                            borderRadius: 0,
-                                            bgcolor: viewMode === 'list' ? 'action.selected' : 'transparent'
-                                        }}
-                                    >
-                                        <ViewList />
-                                    </IconButton>
-                                </Tooltip>
-                            </Stack>
-                        </Paper>
+                        <Chip 
+                            label={`${viewMode} view`}
+                            variant="outlined"
+                            size="small"
+                        />
                     </Stack>
-                </Paper>
+                </Box>
 
-                {/* Results Summary */}
-                <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary' }}>
-                    Showing <strong>{filteredProjects.length}</strong> projects
-                    {selectedPhase !== 'All Phases' && (
-                        <span> in <strong>{selectedPhase}</strong> phase</span>
-                    )}
-                </Typography>
-
-                {/* Projects Grid */}
-
+                {/* Projects Grid with enhanced styling */}
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {filteredProjects.map((project) => (
                         <Grid key={project.id} size={{ xs: 2, sm: 4 }}>
-                            <ProjectCard project={project} isListView={viewMode === 'list'} />
+                            <Box sx={{
+                                position: 'relative',
+                                height: '100%',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    transition: 'transform 0.3s ease-in-out'
+                                }
+                            }}>
+                                <ProjectCard project={project} isListView={viewMode === 'list'} />
+                            </Box>
                         </Grid>
                     ))}
                 </Grid>
 
-
-                {/* Empty State */}
+                {/* Enhanced Empty State */}
                 {filteredProjects.length === 0 && (
-                    <Paper
-                        elevation={1}
-                        sx={{
-                            textAlign: 'center',
-                            py: 8,
-                            px: 4,
-                            borderRadius: 2
-                        }}
-                    >
-                        <Avatar
-                            sx={{
-                                width: 80,
-                                height: 80,
-                                bgcolor: 'action.hover',
-                                color: 'text.secondary',
-                                mx: 'auto',
-                                mb: 3
-                            }}
-                        >
-                            <FilterList sx={{ fontSize: 40 }} />
-                        </Avatar>
-                        <Typography variant="h5" color="text.primary" gutterBottom fontWeight={600}>
-                            No projects found matching your criteria
+                    <Box sx={{
+                        textAlign: 'center',
+                        py: 12,
+                        px: 4,
+                    }}>
+                        <Box sx={{
+                            width: 120,
+                            height: 120,
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mx: 'auto',
+                            mb: 4,
+                            position: 'relative',
+                            '&::before': {
+                                content: '""',
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '50%',
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                opacity: 0.3,
+                                transform: 'scale(1.2)',
+                                animation: 'pulse 2s infinite'
+                            }
+                        }}>
+                            <FilterList sx={{ fontSize: 48, color: 'white', zIndex: 1 }} />
+                        </Box>
+                        
+                        <Typography variant="h4" sx={{ fontWeight: 700, color: 'text.primary', mb: 2 }}>
+                            No projects match your search
                         </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            Try adjusting your search or filter settings to discover more projects
+                        <Typography variant="body1" sx={{ color: 'text.secondary', mb: 4, maxWidth: 500, mx: 'auto' }}>
+                            We couldn't find any projects matching your current filters. Try broadening your search criteria or exploring different project phases.
                         </Typography>
-                    </Paper>
+                        
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+                            <Button 
+                                variant="outlined" 
+                                onClick={() => {
+                                    setSearchTerm('');
+                                    setSelectedPhase('All Phases');
+                                }}
+                                sx={{ borderRadius: 2 }}
+                            >
+                                Clear Filters
+                            </Button>
+                            <Button 
+                                variant="contained" 
+                                sx={{ 
+                                    borderRadius: 2,
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                }}
+                            >
+                                Browse All Projects
+                            </Button>
+                        </Stack>
+                    </Box>
                 )}
             </Container>
         </Box>
