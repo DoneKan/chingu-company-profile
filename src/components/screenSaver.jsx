@@ -9,42 +9,42 @@ import {
   Chip,
   Avatar
 } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import DiamondIcon from '@mui/icons-material/Diamond';
 
-// Create custom dark theme
-const darkTheme = createTheme({
+// Create modern theme with 2025 aesthetics
+const modernTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#0288d1', // Blue
+      main: '#6366f1', // Indigo
     },
     secondary: {
-      main: '#00e5ff', // Cyan
+      main: '#ec4899', // Pink
     },
     background: {
-      default: '#0a0c14',
-      paper: '#1a1e2c',
+      default: '#0f0f23',
+      paper: '#1a1a2e',
     },
     text: {
-      primary: '#e0e0f0',
-      secondary: '#a0a8c0',
+      primary: '#f8fafc',
+      secondary: '#cbd5e1',
     },
   },
   typography: {
-    fontFamily: '"Rajdhani", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Inter", "SF Pro Display", "Helvetica Neue", sans-serif',
     h1: {
-      fontWeight: 700,
-      letterSpacing: '0.5rem',
+      fontWeight: 800,
+      letterSpacing: '-0.02em',
     },
     h2: {
       fontWeight: 300,
-      letterSpacing: '0.2rem',
+      letterSpacing: '0.1em',
     },
   },
 });
 
-export default function RoboticsScreensaverMUI() {
+export default function ModernHero() {
   const canvasRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
@@ -63,7 +63,7 @@ export default function RoboticsScreensaverMUI() {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Robotics gears animation
+  // Modern 3D shapes animation
   useEffect(() => {
     if (!canvasRef.current) return;
     
@@ -74,199 +74,234 @@ export default function RoboticsScreensaverMUI() {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
     
-    // Create gears
-    const gears = Array.from({ length: 15 }, () => ({
+    // Create floating 3D shapes
+    const shapes = Array.from({ length: 12 }, (_, i) => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 40 + 20,
-      teeth: Math.floor(Math.random() * 8) + 8,
-      rotationSpeed: (Math.random() * 0.01) + 0.005,
+      z: Math.random() * 100 + 50,
+      size: Math.random() * 60 + 30,
       rotation: Math.random() * Math.PI * 2,
-      color: `rgba(${Math.floor(Math.random() * 30)}, ${Math.floor(Math.random() * 150) + 100}, ${Math.floor(Math.random() * 100) + 155}, 0.7)`
+      rotationSpeed: (Math.random() - 0.5) * 0.02,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      vz: (Math.random() - 0.5) * 0.3,
+      type: ['cube', 'sphere', 'diamond'][Math.floor(Math.random() * 3)],
+      hue: Math.random() * 60 + 240, // Blue to purple range
+      pulseOffset: Math.random() * Math.PI * 2
     }));
     
-    // Create connection nodes (circuit-like points)
-    const nodes = Array.from({ length: 20 }, () => ({
+    // Create floating particles
+    const particles = Array.from({ length: 40 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 1.2,
-      vy: (Math.random() - 0.5) * 1.2,
-      radius: Math.random() * 3 + 2,
-      connections: []
+      z: Math.random() * 50 + 25,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 3 + 1,
+      opacity: Math.random() * 0.8 + 0.2,
+      twinkle: Math.random() * Math.PI * 2
     }));
     
-    // Draw a gear
-    const drawGear = (x, y, outerRadius, innerRadius, teeth, toothDepth, rotation, color) => {
-      ctx.beginPath();
+    let time = 0;
+    
+    // Draw 3D cube
+    const drawCube = (x, y, size, rotation, depth, hue, alpha) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rotation);
       
-      const toothAngle = (2 * Math.PI) / teeth;
+      const perspective = 0.6;
+      const s = size * (1 + depth * 0.01);
       
-      for (let i = 0; i < teeth; i++) {
-        const angle = i * toothAngle;
-        
-        // Move to inner point of current tooth
-        ctx.lineTo(
-          innerRadius * Math.cos(angle),
-          innerRadius * Math.sin(angle)
-        );
-        
-        // Draw to outer point of current tooth
-        ctx.lineTo(
-          outerRadius * Math.cos(angle + toothAngle / 4),
-          outerRadius * Math.sin(angle + toothAngle / 4)
-        );
-        
-        // Draw to outer point of current tooth
-        ctx.lineTo(
-          outerRadius * Math.cos(angle + toothAngle / 2),
-          outerRadius * Math.sin(angle + toothAngle / 2)
-        );
-        
-        // Back to inner point of next tooth
-        ctx.lineTo(
-          innerRadius * Math.cos(angle + toothAngle * 3/4),
-          innerRadius * Math.sin(angle + toothAngle * 3/4)
-        );
-      }
+      // Create gradient for 3D effect
+      const gradient = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2);
+      gradient.addColorStop(0, `hsla(${hue}, 70%, 65%, ${alpha})`);
+      gradient.addColorStop(1, `hsla(${hue + 20}, 80%, 45%, ${alpha * 0.8})`);
       
+      // Front face
+      ctx.fillStyle = gradient;
+      ctx.fillRect(-s/2, -s/2, s, s);
+      
+      // Top face (3D effect)
+      ctx.beginPath();
+      ctx.moveTo(-s/2, -s/2);
+      ctx.lineTo(-s/2 + s * perspective, -s/2 - s * perspective);
+      ctx.lineTo(s/2 + s * perspective, -s/2 - s * perspective);
+      ctx.lineTo(s/2, -s/2);
       ctx.closePath();
-      ctx.fillStyle = color;
+      ctx.fillStyle = `hsla(${hue + 10}, 60%, 75%, ${alpha * 0.9})`;
       ctx.fill();
       
-      // Draw inner circle
+      // Right face (3D effect)
       ctx.beginPath();
-      ctx.arc(0, 0, innerRadius * 0.6, 0, Math.PI * 2);
-      ctx.fillStyle = '#111a2e';
+      ctx.moveTo(s/2, -s/2);
+      ctx.lineTo(s/2 + s * perspective, -s/2 - s * perspective);
+      ctx.lineTo(s/2 + s * perspective, s/2 - s * perspective);
+      ctx.lineTo(s/2, s/2);
+      ctx.closePath();
+      ctx.fillStyle = `hsla(${hue - 10}, 65%, 55%, ${alpha * 0.7})`;
       ctx.fill();
       
-      // Draw center hole
-      ctx.beginPath();
-      ctx.arc(0, 0, innerRadius * 0.2, 0, Math.PI * 2);
-      ctx.fillStyle = '#060a14';
-      ctx.fill();
+      // Add glow
+      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.3)`;
+      ctx.shadowBlur = 15;
+      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.5})`;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-s/2, -s/2, s, s);
       
       ctx.restore();
     };
     
-    // Draw 3D circuit line
-    const drawCircuitLine = (x1, y1, x2, y2) => {
-      const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-      gradient.addColorStop(0, 'rgba(0, 195, 255, 0.8)');
-      gradient.addColorStop(1, 'rgba(0, 140, 255, 0.2)');
+    // Draw 3D sphere
+    const drawSphere = (x, y, size, depth, hue, alpha, pulse) => {
+      ctx.save();
+      ctx.translate(x, y);
+      
+      const radius = size * (1 + depth * 0.01) * (1 + Math.sin(pulse) * 0.1);
+      
+      // Create radial gradient for 3D sphere effect
+      const gradient = ctx.createRadialGradient(
+        -radius * 0.3, -radius * 0.3, 0,
+        0, 0, radius
+      );
+      gradient.addColorStop(0, `hsla(${hue}, 80%, 80%, ${alpha})`);
+      gradient.addColorStop(0.7, `hsla(${hue}, 70%, 60%, ${alpha * 0.8})`);
+      gradient.addColorStop(1, `hsla(${hue - 20}, 60%, 40%, ${alpha * 0.6})`);
       
       ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = gradient;
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      
+      // Add highlight
+      ctx.beginPath();
+      ctx.arc(-radius * 0.3, -radius * 0.3, radius * 0.2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
+      ctx.fill();
+      
+      // Add glow
+      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.4)`;
+      ctx.shadowBlur = 20;
+      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.3})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      
+      ctx.restore();
+    };
+    
+    // Draw 3D diamond
+    const drawDiamond = (x, y, size, rotation, depth, hue, alpha) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      
+      const s = size * (1 + depth * 0.01);
+      
+      // Create gradient
+      const gradient = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2);
+      gradient.addColorStop(0, `hsla(${hue}, 85%, 70%, ${alpha})`);
+      gradient.addColorStop(0.5, `hsla(${hue + 30}, 90%, 80%, ${alpha})`);
+      gradient.addColorStop(1, `hsla(${hue}, 75%, 50%, ${alpha * 0.8})`);
+      
+      // Draw diamond shape
+      ctx.beginPath();
+      ctx.moveTo(0, -s/2);
+      ctx.lineTo(s/2, 0);
+      ctx.lineTo(0, s/2);
+      ctx.lineTo(-s/2, 0);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      
+      // Add sparkle effect
+      ctx.strokeStyle = `hsla(${hue + 40}, 95%, 85%, ${alpha * 0.6})`;
       ctx.lineWidth = 2;
       ctx.stroke();
       
-      // Add glow effect
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = 'rgba(0, 200, 255, 0.3)';
-      ctx.lineWidth = 4;
+      // Add glow
+      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.5)`;
+      ctx.shadowBlur = 25;
+      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.4})`;
+      ctx.lineWidth = 1;
       ctx.stroke();
+      
+      ctx.restore();
     };
     
     // Animation loop
     const animate = () => {
-      // Only proceed if canvas is still in the document
       if (!canvas.isConnected) return;
       
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      time += 0.01;
       
-      // Draw background grid (subtle tech pattern)
-      ctx.strokeStyle = 'rgba(40, 50, 90, 0.1)';
-      ctx.lineWidth = 1;
-      const gridSize = 30;
+      // Create subtle gradient background
+      const bgGradient = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 0,
+        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height)
+      );
+      bgGradient.addColorStop(0, '#1a1a2e');
+      bgGradient.addColorStop(1, '#0f0f23');
       
-      for (let x = 0; x < canvas.width; x += gridSize) {
+      ctx.fillStyle = bgGradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Update and draw particles
+      particles.forEach(particle => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.twinkle += 0.05;
+        
+        // Wrap around screen
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
+        
+        const twinkleAlpha = particle.opacity * (0.5 + 0.5 * Math.sin(particle.twinkle));
+        
+        ctx.save();
+        ctx.shadowColor = '#6366f1';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = `rgba(99, 102, 241, ${twinkleAlpha})`;
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-      
-      for (let y = 0; y < canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
-      
-      // Update and draw gears
-      gears.forEach(gear => {
-        gear.rotation += gear.rotationSpeed;
-        drawGear(
-          gear.x,
-          gear.y,
-          gear.radius,
-          gear.radius * 0.7,
-          gear.teeth,
-          gear.radius * 0.2,
-          gear.rotation,
-          gear.color
-        );
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       });
       
-      // Update nodes
-      nodes.forEach(node => {
-        node.x += node.vx;
-        node.y += node.vy;
+      // Update and draw 3D shapes
+      shapes.forEach(shape => {
+        // Update position
+        shape.x += shape.vx;
+        shape.y += shape.vy;
+        shape.z += shape.vz;
+        shape.rotation += shape.rotationSpeed;
+        shape.pulseOffset += 0.05;
         
         // Bounce off edges
-        if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
-        if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+        if (shape.x < -100 || shape.x > canvas.width + 100) shape.vx *= -1;
+        if (shape.y < -100 || shape.y > canvas.height + 100) shape.vy *= -1;
+        if (shape.z < 20 || shape.z > 150) shape.vz *= -1;
         
-        node.connections = [];
-      });
-      
-      // Find connections between nodes
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 180) {
-            nodes[i].connections.push(j);
-            nodes[j].connections.push(i);
-          }
+        // Calculate alpha based on depth
+        const alpha = 0.3 + (shape.z / 150) * 0.5;
+        const pulse = Math.sin(time * 2 + shape.pulseOffset);
+        
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+        
+        // Draw shape based on type
+        switch (shape.type) {
+          case 'cube':
+            drawCube(shape.x, shape.y, shape.size, shape.rotation, shape.z, shape.hue, alpha);
+            break;
+          case 'sphere':
+            drawSphere(shape.x, shape.y, shape.size / 2, shape.z, shape.hue + 60, alpha, pulse);
+            break;
+          case 'diamond':
+            drawDiamond(shape.x, shape.y, shape.size * 0.8, shape.rotation, shape.z, shape.hue + 120, alpha);
+            break;
         }
-      }
-      
-      // Draw connections
-      nodes.forEach((node, i) => {
-        node.connections.forEach(j => {
-          if (i < j) { // Avoid drawing lines twice
-            drawCircuitLine(node.x, node.y, nodes[j].x, nodes[j].y);
-          }
-        });
-      });
-      
-      // Draw nodes
-      nodes.forEach(node => {
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 195, 255, 0.8)';
-        ctx.fill();
-        
-        // Add glow
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2);
-        const gradient = ctx.createRadialGradient(
-          node.x, node.y, node.radius,
-          node.x, node.y, node.radius * 2
-        );
-        gradient.addColorStop(0, 'rgba(0, 195, 255, 0.3)');
-        gradient.addColorStop(1, 'rgba(0, 195, 255, 0)');
-        ctx.fillStyle = gradient;
-        ctx.fill();
       });
       
       requestAnimationFrame(animate);
@@ -280,7 +315,7 @@ export default function RoboticsScreensaverMUI() {
   }, [dimensions]);
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={modernTheme}>
       <CssBaseline />
       <Box
         sx={{
@@ -291,17 +326,17 @@ export default function RoboticsScreensaverMUI() {
           bgcolor: 'background.default',
         }}
       >
-        {/* Background gradient overlay */}
+        {/* Modern gradient overlay */}
         <Box
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(135deg, rgba(13, 71, 161, 0.3) 0%, rgba(10, 12, 20, 0.9) 100%)',
+            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.05) 50%, rgba(15, 15, 35, 0.8) 100%)',
             zIndex: 10,
           }}
         />
         
-        {/* Canvas for robotics animation */}
+        {/* Canvas for 3D animation */}
         <Box
           component="canvas"
           ref={canvasRef}
@@ -310,20 +345,6 @@ export default function RoboticsScreensaverMUI() {
             inset: 0,
             display: 'block',
             zIndex: 20,
-          }}
-        />
-        
-        {/* Background texture */}
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'url("/api/placeholder/1920/1080")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.25,
-            filter: 'brightness(0.3) contrast(1.25)',
-            zIndex: 0,
           }}
         />
         
@@ -340,49 +361,51 @@ export default function RoboticsScreensaverMUI() {
             zIndex: 30,
           }}
         >
-          {/* Logo at top */}
+          {/* Modern logo */}
           <Box
             sx={{
-              mb: 6,
+              mb: 8,
               position: 'relative',
-              width: 100,
-              height: 100,
-              borderRadius: '50%',
-              bgcolor: 'rgba(25, 35, 60, 0.85)',
+              width: 120,
+              height: 120,
+              borderRadius: '24px',
+              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.1) 100%)',
+              backdropFilter: 'blur(20px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '2px solid',
-              borderColor: 'primary.light',
-              boxShadow: '0 0 30px rgba(0, 229, 255, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)',
             }}
           >
             <Avatar
               sx={{
-                width: 60,
-                height: 60,
+                width: 80,
+                height: 80,
                 bgcolor: 'transparent',
-                color: theme => theme.palette.primary.light,
+                background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
+                animation: 'float 6s ease-in-out infinite',
               }}
             >
-              <SettingsIcon sx={{ fontSize: 40, animation: 'spin 10s linear infinite' }} />
+              <DiamondIcon sx={{ fontSize: 40, color: 'white' }} />
             </Avatar>
           </Box>
           
-          {/* Text */}
+          {/* Modern text */}
           <Box sx={{ textAlign: 'center' }}>
             <Typography 
               variant="h1" 
               sx={{ 
-                fontSize: { xs: '3rem', sm: '4rem', md: '5rem' },
-                mb: 1,
-                textShadow: '0 0 15px rgba(0, 229, 255, 0.5)',
-                background: 'linear-gradient(90deg, #0288d1 0%, #29b6f6 50%, #0288d1 100%)',
+                fontSize: { xs: '4rem', sm: '6rem', md: '8rem' },
+                mb: 2,
+                background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #06b6d4 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
-                color: 'white',
-                fontWeight: 700,
-                letterSpacing: '0.5rem'
+                color: 'transparent',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+                textShadow: 'none',
+                animation: 'glow 4s ease-in-out infinite alternate'
               }}
             >
               CHINGU
@@ -390,66 +413,69 @@ export default function RoboticsScreensaverMUI() {
             <Typography 
               variant="h2" 
               sx={{ 
-                fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
-                color: 'white',
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                color: 'rgba(248, 250, 252, 0.8)',
                 fontWeight: 300,
-                letterSpacing: '0.3rem'
+                letterSpacing: '0.1em',
+                opacity: 0.9
               }}
             >
-              CUT ACROSS
+              CREATIVE STUDIO
             </Typography>
           </Box>
           
-          {/* Animated badge below text */}
+          {/* Modern badge */}
           <Box 
             sx={{ 
-              mt: 6,
+              mt: 8,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              opacity: 0.8
+              px: 4,
+              py: 2,
+              borderRadius: '50px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
             }}
           >
-            <PrecisionManufacturingIcon sx={{ mr: 1, color: 'secondary.main' }} />
-            <Typography variant="body2" sx={{ color: 'secondary.light' }}>
-              ADVANCED SYSTEMS
+            <AutoAwesomeIcon sx={{ mr: 2, color: '#ec4899' }} />
+            <Typography variant="body1" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+              EXPERIENCE THE FUTURE
             </Typography>
           </Box>
         </Container>
         
-        {/* Development watermark */}
+        {/* Modern dev badge */}
         <Chip
-          label="DEV MODE"
+          label="2025"
           color="primary"
-          variant="outlined"
-          size="small"
-          icon={<Box sx={{ fontSize: 14, fontWeight: 'bold' }}>1</Box>}
+          variant="filled"
+          size="medium"
           sx={{
             position: 'absolute',
-            top: 16,
-            right: 16,
-            bgcolor: 'rgba(25, 118, 210, 0.15)',
-            backdropFilter: 'blur(5px)',
+            top: 24,
+            right: 24,
+            background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
+            color: 'white',
+            fontWeight: 'bold',
+            backdropFilter: 'blur(10px)',
             zIndex: 40,
-            px: 1,
-            borderRadius: 1,
-            '& .MuiChip-icon': {
-              ml: 0.5,
-              mr: -0.5,
-            }
+            px: 2,
+            borderRadius: '12px',
           }}
         />
         
-        {/* Add keyframes for spin animation */}
+        {/* Add keyframes for animations */}
         <Box
           sx={{
-            '@keyframes spin': {
-              '0%': {
-                transform: 'rotate(0deg)',
-              },
-              '100%': {
-                transform: 'rotate(360deg)',
-              },
+            '@keyframes float': {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-10px) rotate(180deg)' },
+            },
+            '@keyframes glow': {
+              '0%': { filter: 'drop-shadow(0 0 20px rgba(99, 102, 241, 0.3))' },
+              '100%': { filter: 'drop-shadow(0 0 40px rgba(236, 72, 153, 0.4))' },
             },
           }}
         />

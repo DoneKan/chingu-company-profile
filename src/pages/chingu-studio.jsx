@@ -12,30 +12,30 @@ import ImagePlaceholder from "../components/Chingu-Studio/ImagePlaceholder";
 
 const ChinguStudioPage = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('default'));
 
   // Studio services
   const studioServices = [
     {
-      icon: "BrushIcon", // You'd replace this with your actual icon component
+      icon: "", // You'd replace this with your actual icon component
       title: "Visual Design",
       description: "We create stunning visuals that communicate your brand's story effectively across all touchpoints.",
       color: theme.palette.primary.main
     },
     {
-      icon: "LayersIcon", // You'd replace this with your actual icon component
+      icon: "", // You'd replace this with your actual icon component
       title: "UX/UI Design",
       description: "User-centered design solutions that balance aesthetics with functionality and usability.",
       color: theme.palette.secondary.main
     },
     {
-      icon: "PaletteIcon", // You'd replace this with your actual icon component
+      icon: "", // You'd replace this with your actual icon component
       title: "Brand Identity",
       description: "Crafting cohesive brand systems that resonate with your audience and set you apart.",
       color: "#FF6B6B" // Chingu Studio's color
     },
     {
-      icon: "DevicesIcon", // You'd replace this with your actual icon component
+      icon: "", // You'd replace this with your actual icon component
       title: "Digital Product Design",
       description: "End-to-end product design from concept and wireframing to prototyping and testing.",
       color: theme.palette.info.main
@@ -103,7 +103,7 @@ const ChinguStudioPage = () => {
               display: 'inline-block',
               '&::after': {
                 content: '""',
-                position: 'absolute',
+                position: 'auto',
                 bottom: '-8px',
                 left: '50%',
                 transform: 'translateX(-50%)',
