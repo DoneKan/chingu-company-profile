@@ -74,182 +74,65 @@ export default function ModernHero() {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
     
-    // Create floating 3D shapes
-    const shapes = Array.from({ length: 12 }, (_, i) => ({
+    // Create fewer, simpler floating shapes
+    const shapes = Array.from({ length: 6 }, (_, i) => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      z: Math.random() * 100 + 50,
-      size: Math.random() * 60 + 30,
+      size: Math.random() * 40 + 20,
       rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 0.02,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      vz: (Math.random() - 0.5) * 0.3,
-      type: ['cube', 'sphere', 'diamond'][Math.floor(Math.random() * 3)],
-      hue: Math.random() * 60 + 240, // Blue to purple range
-      pulseOffset: Math.random() * Math.PI * 2
-    }));
-    
-    // Create floating particles
-    const particles = Array.from({ length: 40 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      z: Math.random() * 50 + 25,
+      rotationSpeed: (Math.random() - 0.5) * 0.01,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 3 + 1,
-      opacity: Math.random() * 0.8 + 0.2,
-      twinkle: Math.random() * Math.PI * 2
+      hue: Math.random() * 60 + 240,
+      alpha: Math.random() * 0.4 + 0.2
+    }));
+    
+    // Fewer particles
+    const particles = Array.from({ length: 15 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.6 + 0.3
     }));
     
     let time = 0;
     
-    // Draw 3D cube
-    const drawCube = (x, y, size, rotation, depth, hue, alpha) => {
+    // Simple optimized shape drawing
+    const drawShape = (x, y, size, rotation, hue, alpha) => {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rotation);
       
-      const perspective = 0.6;
-      const s = size * (1 + depth * 0.01);
-      
-      // Create gradient for 3D effect
-      const gradient = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2);
+      // Simple gradient rectangle (much faster than complex 3D)
+      const gradient = ctx.createLinearGradient(-size/2, -size/2, size/2, size/2);
       gradient.addColorStop(0, `hsla(${hue}, 70%, 65%, ${alpha})`);
-      gradient.addColorStop(1, `hsla(${hue + 20}, 80%, 45%, ${alpha * 0.8})`);
+      gradient.addColorStop(1, `hsla(${hue + 20}, 60%, 45%, ${alpha * 0.7})`);
       
-      // Front face
       ctx.fillStyle = gradient;
-      ctx.fillRect(-s/2, -s/2, s, s);
+      ctx.fillRect(-size/2, -size/2, size, size);
       
-      // Top face (3D effect)
-      ctx.beginPath();
-      ctx.moveTo(-s/2, -s/2);
-      ctx.lineTo(-s/2 + s * perspective, -s/2 - s * perspective);
-      ctx.lineTo(s/2 + s * perspective, -s/2 - s * perspective);
-      ctx.lineTo(s/2, -s/2);
-      ctx.closePath();
-      ctx.fillStyle = `hsla(${hue + 10}, 60%, 75%, ${alpha * 0.9})`;
-      ctx.fill();
-      
-      // Right face (3D effect)
-      ctx.beginPath();
-      ctx.moveTo(s/2, -s/2);
-      ctx.lineTo(s/2 + s * perspective, -s/2 - s * perspective);
-      ctx.lineTo(s/2 + s * perspective, s/2 - s * perspective);
-      ctx.lineTo(s/2, s/2);
-      ctx.closePath();
-      ctx.fillStyle = `hsla(${hue - 10}, 65%, 55%, ${alpha * 0.7})`;
-      ctx.fill();
-      
-      // Add glow
-      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.3)`;
-      ctx.shadowBlur = 15;
-      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.5})`;
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-s/2, -s/2, s, s);
-      
-      ctx.restore();
-    };
-    
-    // Draw 3D sphere
-    const drawSphere = (x, y, size, depth, hue, alpha, pulse) => {
-      ctx.save();
-      ctx.translate(x, y);
-      
-      const radius = size * (1 + depth * 0.01) * (1 + Math.sin(pulse) * 0.1);
-      
-      // Create radial gradient for 3D sphere effect
-      const gradient = ctx.createRadialGradient(
-        -radius * 0.3, -radius * 0.3, 0,
-        0, 0, radius
-      );
-      gradient.addColorStop(0, `hsla(${hue}, 80%, 80%, ${alpha})`);
-      gradient.addColorStop(0.7, `hsla(${hue}, 70%, 60%, ${alpha * 0.8})`);
-      gradient.addColorStop(1, `hsla(${hue - 20}, 60%, 40%, ${alpha * 0.6})`);
-      
-      ctx.beginPath();
-      ctx.arc(0, 0, radius, 0, Math.PI * 2);
-      ctx.fillStyle = gradient;
-      ctx.fill();
-      
-      // Add highlight
-      ctx.beginPath();
-      ctx.arc(-radius * 0.3, -radius * 0.3, radius * 0.2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
-      ctx.fill();
-      
-      // Add glow
-      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.4)`;
-      ctx.shadowBlur = 20;
-      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.3})`;
+      // Simple border glow
+      ctx.strokeStyle = `hsla(${hue}, 80%, 70%, ${alpha * 0.5})`;
       ctx.lineWidth = 1;
-      ctx.stroke();
+      ctx.strokeRect(-size/2, -size/2, size, size);
       
       ctx.restore();
     };
     
-    // Draw 3D diamond
-    const drawDiamond = (x, y, size, rotation, depth, hue, alpha) => {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(rotation);
-      
-      const s = size * (1 + depth * 0.01);
-      
-      // Create gradient
-      const gradient = ctx.createLinearGradient(-s/2, -s/2, s/2, s/2);
-      gradient.addColorStop(0, `hsla(${hue}, 85%, 70%, ${alpha})`);
-      gradient.addColorStop(0.5, `hsla(${hue + 30}, 90%, 80%, ${alpha})`);
-      gradient.addColorStop(1, `hsla(${hue}, 75%, 50%, ${alpha * 0.8})`);
-      
-      // Draw diamond shape
-      ctx.beginPath();
-      ctx.moveTo(0, -s/2);
-      ctx.lineTo(s/2, 0);
-      ctx.lineTo(0, s/2);
-      ctx.lineTo(-s/2, 0);
-      ctx.closePath();
-      ctx.fillStyle = gradient;
-      ctx.fill();
-      
-      // Add sparkle effect
-      ctx.strokeStyle = `hsla(${hue + 40}, 95%, 85%, ${alpha * 0.6})`;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      
-      // Add glow
-      ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.5)`;
-      ctx.shadowBlur = 25;
-      ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${alpha * 0.4})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      
-      ctx.restore();
-    };
-    
-    // Animation loop
+    // Animation loop - optimized for performance
     const animate = () => {
       if (!canvas.isConnected) return;
       
-      time += 0.01;
-      
-      // Create subtle gradient background
-      const bgGradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height)
-      );
-      bgGradient.addColorStop(0, '#1a1a2e');
-      bgGradient.addColorStop(1, '#0f0f23');
-      
-      ctx.fillStyle = bgGradient;
+      // Clear with solid color (faster than gradients)
+      ctx.fillStyle = '#0f0f23';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Update and draw particles
+      // Update and draw particles (simplified)
       particles.forEach(particle => {
         particle.x += particle.vx;
         particle.y += particle.vy;
-        particle.twinkle += 0.05;
         
         // Wrap around screen
         if (particle.x < 0) particle.x = canvas.width;
@@ -257,51 +140,26 @@ export default function ModernHero() {
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
         
-        const twinkleAlpha = particle.opacity * (0.5 + 0.5 * Math.sin(particle.twinkle));
-        
-        ctx.save();
-        ctx.shadowColor = '#6366f1';
-        ctx.shadowBlur = 10;
-        ctx.fillStyle = `rgba(99, 102, 241, ${twinkleAlpha})`;
+        // Simple particle drawing
+        ctx.fillStyle = `rgba(99, 102, 241, ${particle.opacity})`;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
-        ctx.restore();
       });
       
-      // Update and draw 3D shapes
+      // Update and draw shapes (simplified)
       shapes.forEach(shape => {
         // Update position
         shape.x += shape.vx;
         shape.y += shape.vy;
-        shape.z += shape.vz;
         shape.rotation += shape.rotationSpeed;
-        shape.pulseOffset += 0.05;
         
         // Bounce off edges
-        if (shape.x < -100 || shape.x > canvas.width + 100) shape.vx *= -1;
-        if (shape.y < -100 || shape.y > canvas.height + 100) shape.vy *= -1;
-        if (shape.z < 20 || shape.z > 150) shape.vz *= -1;
+        if (shape.x < -50 || shape.x > canvas.width + 50) shape.vx *= -1;
+        if (shape.y < -50 || shape.y > canvas.height + 50) shape.vy *= -1;
         
-        // Calculate alpha based on depth
-        const alpha = 0.3 + (shape.z / 150) * 0.5;
-        const pulse = Math.sin(time * 2 + shape.pulseOffset);
-        
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
-        
-        // Draw shape based on type
-        switch (shape.type) {
-          case 'cube':
-            drawCube(shape.x, shape.y, shape.size, shape.rotation, shape.z, shape.hue, alpha);
-            break;
-          case 'sphere':
-            drawSphere(shape.x, shape.y, shape.size / 2, shape.z, shape.hue + 60, alpha, pulse);
-            break;
-          case 'diamond':
-            drawDiamond(shape.x, shape.y, shape.size * 0.8, shape.rotation, shape.z, shape.hue + 120, alpha);
-            break;
-        }
+        // Draw simple shape
+        drawShape(shape.x, shape.y, shape.size, shape.rotation, shape.hue, shape.alpha);
       });
       
       requestAnimationFrame(animate);
